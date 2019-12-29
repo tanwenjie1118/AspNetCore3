@@ -1,7 +1,0 @@
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\bin\Debug\netcoreapp3.0\Infrastructure.deps.json
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\bin\Debug\netcoreapp3.0\Infrastructure.dll
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\obj\Debug\netcoreapp3.0\Infrastructure.AssemblyInfoInputs.cache
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\obj\Debug\netcoreapp3.0\Infrastructure.AssemblyInfo.cs
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\bin\Debug\netcoreapp3.0\Infrastructure.pdb
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\obj\Debug\netcoreapp3.0\Infrastructure.dll
-D:\Git\JustForFun\AspDotNetCore3\Infrastructure\obj\Debug\netcoreapp3.0\Infrastructure.pdb
