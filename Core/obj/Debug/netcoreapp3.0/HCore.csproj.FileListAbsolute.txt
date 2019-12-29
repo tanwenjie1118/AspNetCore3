@@ -1,0 +1,4 @@
+D:\Git\JustForFun\AspDotNetCore3\HCore\bin\Debug\netcoreapp3.0\HCore.deps.json
+D:\Git\JustForFun\AspDotNetCore3\HCore\bin\Debug\netcoreapp3.0\HCore.dll
+D:\Git\JustForFun\AspDotNetCore3\HCore\obj\Debug\netcoreapp3.0\HCore.AssemblyInfoInputs.cache
+D:\Git\JustForFun\AspDotNetCore3\HCore\obj\Debug\netcoreapp3.0\HCore.AssemblyInfo.cs

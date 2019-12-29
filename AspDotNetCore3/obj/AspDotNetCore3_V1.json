@@ -1,0 +1,19 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": " 接口文档",
+    "description": " HTTP API V1",
+    "version": "V1"
+  },
+  "paths": { },
+  "components": {
+    "securitySchemes": {
+      "oauth2": {
+        "type": "apiKey",
+        "description": "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}
