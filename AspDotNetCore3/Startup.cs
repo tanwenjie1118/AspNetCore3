@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AspDotNetCore3.Extensions;
+using AspNetCoreRateLimit;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,16 +21,19 @@ namespace AspDotNetCore3
     public class Startup
     {
         // private IServiceCollection services;
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment Env)
         {
             Configuration = configuration;
+            this.Env = Env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(new Appsettings(Env.ContentRootPath));
             services.AddIdentityServer(option =>
             {
                 //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
@@ -84,9 +89,13 @@ namespace AspDotNetCore3
                 options.IgnoredPaths.Add("/lib");
                 options.IgnoredPaths.Add("/css");
                 options.IgnoredPaths.Add("/js");
+
             }).AddEntityFramework();
 
+            // Add IP Rate Limit
+            services.AddIpPolicyRateLimitSetup(Configuration);
 
+            // ADD Swagger
             services.AddSwaggerGen(options =>
             {
                 var basePath = AppContext.BaseDirectory;
@@ -147,6 +156,8 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseIpRateLimiting();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -189,7 +200,7 @@ namespace AspDotNetCore3
             });
 
             app.UseMiniProfiler()
-                .UseIdentityServer()
+                   //  .UseIdentityServer()
                    .UseStaticFiles()
                    .UseRouting()
                    .UseHttpsRedirection()

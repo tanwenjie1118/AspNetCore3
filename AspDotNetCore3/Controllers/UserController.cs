@@ -18,5 +18,11 @@ namespace AspDotNetCore3.Controllers
         {
             _logger = logger;
         }
+
+        [HttpGet]
+        public string UserInfo()
+        {
+            return "This is aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa !!!!!!!!!!";
+        }
     }
 }
