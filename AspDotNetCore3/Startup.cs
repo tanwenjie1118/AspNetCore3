@@ -53,11 +53,14 @@ namespace AspDotNetCore3
                 var constr = Appsettings.app("Cache", "RedisConnection");
                 options.UseCache(constr);
             });
+
             services.AddMongoDbContext<MongoDbContext>((
               Appsettings.app("Database", "Mongodb", "Conn"),
               Appsettings.app("Database", "Mongodb", "Ssl").ToBool(),
               Appsettings.app("Database", "Mongodb", "dbNo"),
               TimeSpan.FromMinutes(1)));
+
+            services.AddHttpContextAccessor();
 
             services.AddControllers()
                 .AddNewtonsoftJson(option =>
@@ -111,7 +114,7 @@ namespace AspDotNetCore3
             }).AddEntityFramework();
 
             // Add IP Rate Limit
-            services.AddIpPolicyRateLimitSetup(Configuration);
+            services.AddIpPolicyRateLimit(Configuration);
 
             // ADD Swagger
             services.AddSwaggerGen(options =>
@@ -191,6 +194,8 @@ namespace AspDotNetCore3
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
+
+            app.UseStaticHttpContext();
 
             app.UseIpRateLimiting();
 

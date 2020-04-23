@@ -34,7 +34,7 @@ namespace Tests
         [Fact]
         public void Test2()
         {
-            var entity = db.Get("ae91eff9-f70b-48c5-83ed-25e9a9708006");
+            var entity = db.Get("f5c9679e-f3dd-4dd7-9eec-b4254c04ad9c");
 
             Assert.NotNull(entity);
         }

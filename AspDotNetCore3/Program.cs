@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using NLog.Web;
 
 namespace AspDotNetCore3
 {
@@ -24,7 +25,11 @@ namespace AspDotNetCore3
            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureLogging((builder) =>
+                    {
+                        builder.ClearProviders();
+                    }).UseNLog();
                 });
     }
 }

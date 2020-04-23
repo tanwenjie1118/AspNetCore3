@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -10,11 +10,13 @@
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="IdentityServer4" Version="3.0.2" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.3" />
+    <PackageReference Include="sqlSugarCore" Version="5.0.0.14" />
     <PackageReference Include="StackExchange.Redis" Version="2.1.30" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Entityframework\" />
+    <Folder Include="SqlSugar\" />
   </ItemGroup>
 
 </Project>
