@@ -2,13 +2,16 @@
 
 What we support now or in the future we will ?
 
-- Mini Profiler for http request
-- IP Rate Limit for http request
+- Mini Profiler
+- IP Rate Limit
 - Swagger developer document
 - SignalR
 - Docker CI
-- Host Task scheduler
+- Hosted Task scheduler
 - Log4net/Nlog
 - Redis
 - MongoDB
 - IdentityServer4
+- Files service
+- Email service
+- Jwt token

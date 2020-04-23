@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Core.Redis;
 using Infrastructure;
+using Infrastructure.Singleton;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +44,12 @@ namespace AspDotNetCore3
                 //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
                 option.UserInteraction.LoginUrl = "/account/login";
 
+            });
+
+            services.AddContext<RedisContext>(options =>
+            {
+                var constr = Appsettings.app("Cache", "RedisConnection");
+                options.UseCache(constr);
             });
 
             services.AddControllers()
@@ -148,14 +159,32 @@ namespace AspDotNetCore3
             });
         }
 
-        //public void ConfigureContainer(ContainerBuilder builder)
-        //{
+        // autofac container
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // 扫描bin目录下所有程序集
+            var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
+            List<Assembly> assemblies = new List<Assembly>();
+            foreach (var filePath in dllFilePaths)
+            {
+                if (filePath.Contains("Core.dll")
+                    || filePath.Contains("Services.dll")
+                    || filePath.Contains("Infrastructure.dll"))
+                {
+                    var assembly = Assembly.LoadFrom(filePath);
+                    assemblies.Add(assembly);
+                }
+            }
 
-        //}
+            // 全局注册module
+            builder.RegisterAssemblyModules(assemblies.ToArray());
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
+
             app.UseIpRateLimiting();
 
             if (env.IsDevelopment())
