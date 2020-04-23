@@ -7,8 +7,10 @@ using AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Core.MongoDB;
 using Core.Redis;
 using Infrastructure;
+using Infrastructure.Extensions;
 using Infrastructure.Singleton;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +53,11 @@ namespace AspDotNetCore3
                 var constr = Appsettings.app("Cache", "RedisConnection");
                 options.UseCache(constr);
             });
+            services.AddMongoDbContext<MongoDbContext>((
+              Appsettings.app("Database", "Mongodb", "Conn"),
+              Appsettings.app("Database", "Mongodb", "Ssl").ToBool(),
+              Appsettings.app("Database", "Mongodb", "dbNo"),
+              TimeSpan.FromMinutes(1)));
 
             services.AddControllers()
                 .AddNewtonsoftJson(option =>

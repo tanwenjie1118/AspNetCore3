@@ -7,8 +7,8 @@ namespace Tests
 {
     public class RedisTest
     {
-        private TestWebServer<Startup> testWebServer = new TestWebServer<Startup>();
-        private IRedisRepository redis;
+        private readonly TestWebServer<Startup> testWebServer = new TestWebServer<Startup>();
+        private readonly IRedisRepository redis;
         public RedisTest()
         {
             redis = testWebServer.Resolve<IRedisRepository>();

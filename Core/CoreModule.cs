@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Core.MongoDB;
 using Core.Redis;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Core
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType(typeof(RedisRepository)).As(typeof(IRedisRepository));
-
+            builder.RegisterGeneric(typeof(MongoDbRepository<>)).As(typeof(IMongoDbRepository<>));
         }
     }
 }

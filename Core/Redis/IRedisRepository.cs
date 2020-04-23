@@ -38,6 +38,6 @@ namespace Core.Redis
         /// </summary>
         /// <param name="key">key.</param>
         /// <returns></returns>
-        //bool SetKeyExpire(string key);
+        bool SetKeyExpire(string key, int? keyExpire);
     }
 }
