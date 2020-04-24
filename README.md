@@ -7,7 +7,8 @@ What we support now or in the future we will ?
 - Swagger developer document
 - SignalR
 - Docker CI
-- Hosted Task scheduler
+- Hosted Task Service
+- Hangfire
 - Log4net/Nlog
 - Redis
 - MongoDB/SqlLite
@@ -15,3 +16,6 @@ What we support now or in the future we will ?
 - Files service
 - Email service
 - Jwt token
+- Autofac
+- AutoMapper
+- So on

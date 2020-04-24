@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Core.MongoDB;
 using Core.Redis;
+using Hangfire;
+using Hangfire.Common;
 using Infrastructure;
 using Infrastructure.Domain;
 using Infrastructure.Extensions;
@@ -184,6 +187,22 @@ namespace AspDotNetCore3
                     Type = SecuritySchemeType.ApiKey
                 });
             });
+
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseRedisStorage(Appsettings.app("Cache", "RedisConnection"),
+                new Hangfire.Redis.RedisStorageOptions()
+                {
+                    Db = 1
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
+            services.AddJobService();
         }
 
         // autofac container
@@ -208,7 +227,7 @@ namespace AspDotNetCore3
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IRecurringJobManager recurringJob, IBackgroundJobClient backgroundJobs, IWebHostEnvironment env)
         {
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
@@ -222,27 +241,6 @@ namespace AspDotNetCore3
             }
 
             // ConfigureAuthentication(app);
-            //app.MapWhen(context =>
-            //{
-            //    if (context.Request.Path == "/")
-            //    {
-            //        return true;
-            //    }
-            //    else
-            //    {
-            //        return false;
-            //    }
-            //}, (builder) =>
-            //{
-            //    builder.Run(async httpcontext
-            //       =>
-            //   {
-            //       httpcontext.Response.StatusCode = 200;
-            //       httpcontext.Response.ContentType = "application/json; charset=utf-8";
-            //       await httpcontext.Response.WriteAsync("Hello World");
-            //   });
-            //});
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -257,17 +255,29 @@ namespace AspDotNetCore3
                 c.RoutePrefix = ""; //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
             });
 
-            app.UseMiniProfiler()
-                   //  .UseIdentityServer()
-                   .UseStaticFiles()
-                   .UseRouting()
-                   .UseHttpsRedirection()
-                   .UseAuthentication()
-                   .UseAuthorization()
-                   .UseEndpoints(endpoints =>
-                   {
-                       endpoints.MapControllers();
-                   });
+            app.UseMiniProfiler();
+            //  .UseIdentityServer()
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseHangfireDashboard();
+
+            //backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+            //recurringJob.AddOrUpdate(
+            //    Guid.NewGuid().ToString(),
+            //    Job.FromExpression(() => DoingJob()),
+            //    Cron.Minutely(),
+            //    new RecurringJobOptions()
+            //    {
+            //        QueueName = "minutely_job",
+            //        TimeZone = TimeZoneInfo.Local
+            //    });
+            app.UseJob();
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private void ConfigureAuthentication(IApplicationBuilder app)
@@ -322,6 +332,11 @@ namespace AspDotNetCore3
 
             // 访问受保护资源
             app.Map("/resource", builder => builder.Run(async (context) => await context.Response.WriteAsync("Hello, ASP.NET Core!")));
+        }
+
+        public void DoingJob()
+        {
+            Console.WriteLine("Hello world from Hangfire ! DoingJob");
         }
     }
 }

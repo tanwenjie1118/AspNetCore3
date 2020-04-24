@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Security.Claims;
 
 namespace AspDotNetCore3.Controllers
@@ -27,8 +28,22 @@ namespace AspDotNetCore3.Controllers
             di.AddClaim(new Claim(ClaimTypes.NameIdentifier, "xx1133-111x1gg"));
             di.AddClaim(new Claim(ClaimTypes.Role, "admin"));
             var cp = new ClaimsPrincipal(di);
-            HttpContext.SignInAsync(cp).Wait();
+            HttpContext.SignInAsync(cp,
+                new AuthenticationProperties()
+                {
+                    ExpiresUtc = DateTime.Now.AddMinutes(1)
+                }).Wait();
             _logger.LogInformation("=========================Finish Login =======================");
+            return Redirect("/Home/Index");
+        }
+
+
+        [HttpGet("logout")]
+        public ActionResult Logout()
+        {
+            _logger.LogInformation("=========================Start Logout =======================");
+            HttpContext.SignOutAsync().Wait();
+            _logger.LogInformation("=========================Finish Logout =======================");
             return Redirect("/Home/Index");
         }
     }
