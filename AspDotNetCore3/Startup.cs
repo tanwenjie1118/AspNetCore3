@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
 using Autofac;
@@ -10,8 +12,11 @@ using Autofac.Extensions.DependencyInjection;
 using Core.MongoDB;
 using Core.Redis;
 using Infrastructure;
+using Infrastructure.Domain;
 using Infrastructure.Extensions;
 using Infrastructure.Singleton;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -41,12 +46,12 @@ namespace AspDotNetCore3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new Appsettings(Env.ContentRootPath));
-            services.AddIdentityServer(option =>
-            {
-                //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
-                option.UserInteraction.LoginUrl = "/account/login";
+            //services.AddIdentityServer(option =>
+            //{
+            //    //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
+            //    option.UserInteraction.LoginUrl = "/account/login";
 
-            });
+            //});
 
             services.AddContext<RedisContext>(options =>
             {
@@ -62,11 +67,23 @@ namespace AspDotNetCore3
 
             services.AddHttpContextAccessor();
 
+            // add authtication handler
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(configureOptions =>
+            //{
+            //});
+
+            services.AddAuthenticationCore(options =>
+            {
+                options.DefaultScheme = "myScheme";
+                options.AddScheme<MyHandler>("myScheme", "demo scheme");
+            });
+
             services.AddControllers()
-                .AddNewtonsoftJson(option =>
-                {
-                    option.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                });
+                    .AddNewtonsoftJson(option =>
+                    {
+                        option.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    });
             services.AddMemoryCache();
 
             // Add MiniProfiler services
@@ -204,7 +221,7 @@ namespace AspDotNetCore3
                 app.UseDeveloperExceptionPage();
             }
 
-
+            // ConfigureAuthentication(app);
             //app.MapWhen(context =>
             //{
             //    if (context.Request.Path == "/")
@@ -245,11 +262,66 @@ namespace AspDotNetCore3
                    .UseStaticFiles()
                    .UseRouting()
                    .UseHttpsRedirection()
+                   .UseAuthentication()
                    .UseAuthorization()
                    .UseEndpoints(endpoints =>
                    {
                        endpoints.MapControllers();
                    });
+        }
+
+        private void ConfigureAuthentication(IApplicationBuilder app)
+        {
+            // 登录
+            app.Map("/login", builder => builder.Use(next =>
+            {
+                return async (context) =>
+                {
+                    var claimIdentity = new ClaimsIdentity();
+                    claimIdentity.AddClaim(new Claim(ClaimTypes.Name, "Hal"));
+                    await context.SignInAsync("myScheme", new ClaimsPrincipal(claimIdentity));
+                    await next(context);
+                };
+            }));
+
+            // 退出
+            app.Map("/logout", builder => builder.Use(next =>
+            {
+                return async (context) =>
+                {
+                    await context.SignOutAsync("myScheme");
+                    await next(context);
+                };
+            }));
+
+            //// 认证
+            //app.Use(next =>
+            //{
+            //    return async (context) =>
+            //    {
+            //        var result = await context.AuthenticateAsync("myScheme");
+            //        if (result?.Principal != null) context.User = result.Principal;
+            //        await next(context);
+            //    };
+            //});
+
+            //// 授权
+            //app.Use(async (context, next) =>
+            //{
+            //    var user = context.User;
+            //    if (user?.Identity?.IsAuthenticated ?? false)
+            //    {
+            //        if (user.Identity.Name != "Hal") await context.ForbidAsync("myScheme");
+            //        else await next();
+            //    }
+            //    else
+            //    {
+            //        await context.ChallengeAsync("myScheme");
+            //    }
+            //});
+
+            // 访问受保护资源
+            app.Map("/resource", builder => builder.Run(async (context) => await context.Response.WriteAsync("Hello, ASP.NET Core!")));
         }
     }
 }

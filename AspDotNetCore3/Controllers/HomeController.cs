@@ -7,19 +7,19 @@ namespace AspDotNetCore3.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class HomeController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public UserController(ILogger<UserController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet]
-        public string UserInfo()
+        [HttpGet("index")]
+        public string Index()
         {
-            return "This is UserInfo !!!!!!!!!!";
+            return "This is Index Page";
         }
     }
 }

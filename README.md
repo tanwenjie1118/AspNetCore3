@@ -10,7 +10,7 @@ What we support now or in the future we will ?
 - Hosted Task scheduler
 - Log4net/Nlog
 - Redis
-- MongoDB
+- MongoDB/SqlLite
 - IdentityServer4
 - Files service
 - Email service

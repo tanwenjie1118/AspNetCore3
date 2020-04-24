@@ -19,8 +19,10 @@
 		<PackageReference Include="Autofac" Version="5.1.2" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.1.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.1.0" />
 		<PackageReference Include="NLog" Version="4.7.0" />
