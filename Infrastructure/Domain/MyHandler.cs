@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -45,7 +46,12 @@ namespace Infrastructure.Domain
         public Task SignInAsync(ClaimsPrincipal user, AuthenticationProperties properties)
         {
             var ticket = new AuthenticationTicket(user, properties, Scheme.Name);
-            Context.Response.Cookies.Append("myCookie", ObjectHelper.ToString(TicketSerializer.Default.Serialize(ticket)));
+            Context.Response.Cookies.Append("myCookie",
+                ObjectHelper.ToString(TicketSerializer.Default.Serialize(ticket)),
+                new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddMinutes(1)
+                });
             return Task.CompletedTask;
         }
 
