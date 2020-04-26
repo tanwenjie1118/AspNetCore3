@@ -17,19 +17,40 @@ namespace AspDotNetCore3
         public static bool DisableProfilingResults { get; internal set; }
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Info("init main");
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception exception)
+            {
+                //NLog: catch setup errors
+                logger.Error(exception, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                NLog.LogManager.Shutdown();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>()
-                    .ConfigureLogging((builder) =>
-                    {
-                        builder.ClearProviders();
-                    }).UseNLog();
-                });
+            .ConfigureLogging((hostingContext, builder) =>
+            {
+                builder.ClearProviders();//去掉默认添加的日志提供程序
+                builder.AddConsole();
+                builder.AddDebug();
+                builder.AddEventSourceLogger();
+                builder.AddEventLog();
+            })
+            .ConfigureWebHostDefaults(
+            webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>().UseNLog();
+            }).UseNLog();
     }
 }

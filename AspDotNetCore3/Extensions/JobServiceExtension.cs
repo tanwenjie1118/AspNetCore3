@@ -3,6 +3,7 @@ using Infrastructure.Singleton;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Application;
+using Tasks;
 
 namespace AspDotNetCore3.Extensions
 {
@@ -14,6 +15,7 @@ namespace AspDotNetCore3.Extensions
         public static void AddJobService(this IServiceCollection services)
         {
             services.AddSingleton<IJobServices, JobServices>();
+            services.AddHostedService<SimpleHostedTask>();
         }
 
         public static IApplicationBuilder UseJob(this IApplicationBuilder app)

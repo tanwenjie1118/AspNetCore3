@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="NLog.config">
+	  <None Include="nlog.config">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
@@ -50,6 +50,7 @@
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\Services\Services.csproj" />
+		<ProjectReference Include="..\Tasks\Tasks.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
