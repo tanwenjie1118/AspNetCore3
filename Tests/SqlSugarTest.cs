@@ -2,6 +2,7 @@ using AspDotNetCore3;
 using Core.Redis;
 using Core.SqlSugar;
 using System;
+using System.ComponentModel.DataAnnotations;
 using Xunit;
 
 namespace Tests
@@ -16,15 +17,40 @@ namespace Tests
         }
 
         [Fact]
-        public void TestSugar()
+        public void GetList()
         {
             var coms = sqlSugar.GetList<COMPANY>();
 
             Assert.NotNull(coms);
         }
 
+        [Fact]
+        public void GetFirst()
+        {
+            var coms = sqlSugar.Get<COMPANY>(t => t.ID > 0);
+
+            Assert.NotNull(coms);
+        }
+
+
+        [Fact]
+        public void InsertModel()
+        {
+            var coms = sqlSugar.Insert(new COMPANY()
+            {
+                ID = 8,
+                ADDRESS = "aAAAAAAAAAAA",
+                AGE = 98,
+                NAME = "oooooooooooooooopppp",
+                SALARY = 44444444
+            });
+
+            Assert.True(coms > 0);
+        }
+
         public class COMPANY
         {
+            [Key]
             public int ID { get; set; }
             public string NAME { get; set; }
             public int AGE { get; set; }

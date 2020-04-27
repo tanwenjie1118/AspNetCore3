@@ -4,7 +4,7 @@ What we support now or in the future we will ?
 
 - Mini Profiler
 - IP Rate Limit
-- Swagger developer document
+- Swagger
 - SignalR
 - Docker CI
 - Hosted Task Service
@@ -12,9 +12,10 @@ What we support now or in the future we will ?
 - Log4net/Nlog
 - Redis
 - MongoDB/SqlLite
+- SqlSugar/EFCore
 - IdentityServer4
-- Files service
-- Email service
+- Files Manage Plugin
+- Email Service
 - Jwt token
 - Autofac
 - AutoMapper
