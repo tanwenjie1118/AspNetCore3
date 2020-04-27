@@ -63,6 +63,13 @@ namespace AspDotNetCore3
                 options.UseCache(constr);
             });
 
+            services.AddSqlSugar(option =>
+            {
+                option.ConnectionString = Appsettings.app("Database", "Sqlite", "Conn");
+                option.DbType = SqlSugar.DbType.Sqlite;
+                option.AutoClose = true;
+            });
+
             services.AddMongoDbContext<MongoDbContext>((
               Appsettings.app("Database", "Mongodb", "Conn"),
               Appsettings.app("Database", "Mongodb", "Ssl").ToBool(),
@@ -72,11 +79,6 @@ namespace AspDotNetCore3
             services.AddHttpContextAccessor();
 
             // add authtication handler
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(configureOptions =>
-            //{
-            //});
-
             services.AddAuthenticationCore(options =>
             {
                 options.DefaultScheme = "myScheme";
@@ -85,7 +87,7 @@ namespace AspDotNetCore3
 
             services.AddControllers(c =>
             {
-              //  c.Filters.Add(typeof(ExceptionFilter));
+                //  c.Filters.Add(typeof(ExceptionFilter));
             })
             .AddNewtonsoftJson(option =>
             {

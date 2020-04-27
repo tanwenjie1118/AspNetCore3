@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using Core.SqlSugar.Base;
+using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using SqlSugar;
 using System;
@@ -11,11 +12,17 @@ namespace AspDotNetCore3.Extensions
     /// <summary>
     /// SqlSugar
     /// </summary>
-    public static class SqlsugarExtension
+    public static class SqlSugarExtension
     {
-        public static void AddSqlsugar(this IServiceCollection services)
+        public static IServiceCollection AddSqlSugar(this IServiceCollection serviceCollection,Action<SugarOption> option)
         {
+            serviceCollection.AddOptions();
 
+            serviceCollection.Configure(option);
+
+            serviceCollection.AddScoped<SugarContext>();
+
+            return serviceCollection;
         }
     }
 }

@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 		<Folder Include="Entityframework\" />
-		<Folder Include="SqlSugar\" />
 	</ItemGroup>
 
 </Project>
