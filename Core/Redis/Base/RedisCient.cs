@@ -8,27 +8,25 @@ namespace Core.Redis
     {
         private readonly int DatabaseDefault = 0;
 
-        private readonly RedisContextOptions options;
-
         /// <summary>
         /// Redis上下文.
         /// </summary>
         public IDatabase Redis { get; set; }
 
-        public RedisContextOptions Options => options;
+        public RedisContextOptions Options { get; }
 
         public RedisCient(IOptions<RedisContextOptions> options)
         {
-            this.options = options.Value;
-            var configuration = ConfigurationOptions.Parse(this.options.ConnectionString);
+            this.Options = options.Value;
+            var configuration = ConfigurationOptions.Parse(this.Options.ConnectionString);
             configuration.DefaultDatabase = DatabaseDefault;
-            if (this.options.Database > 0)
+            if (this.Options.Database > 0)
             {
-                configuration.DefaultDatabase = this.options.Database;
+                configuration.DefaultDatabase = this.Options.Database;
             }
-            if (this.options.ConnectTimeout != default)
+            if (this.Options.ConnectTimeout != default)
             {
-                configuration.ConnectTimeout = this.options.ConnectTimeout.Milliseconds;
+                configuration.ConnectTimeout = this.Options.ConnectTimeout.Milliseconds;
             }
             try
             {

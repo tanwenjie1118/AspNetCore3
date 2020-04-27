@@ -50,6 +50,7 @@ namespace AspDotNetCore3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new Appsettings(Env.ContentRootPath));
+
             //services.AddIdentityServer(option =>
             //{
             //    //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
@@ -57,12 +58,14 @@ namespace AspDotNetCore3
 
             //});
 
+            // Add redis
             services.AddContext<RedisContext>(options =>
             {
                 var constr = Appsettings.app("Cache", "RedisConnection");
                 options.UseCache(constr);
             });
 
+            // Add sqlsugar
             services.AddSqlSugar(option =>
             {
                 option.ConnectionString = Appsettings.app("Database", "Sqlite", "Conn");
@@ -70,6 +73,7 @@ namespace AspDotNetCore3
                 option.AutoClose = true;
             });
 
+            // Add MongoDb
             services.AddMongoDbContext<MongoDbContext>((
               Appsettings.app("Database", "Mongodb", "Conn"),
               Appsettings.app("Database", "Mongodb", "Ssl").ToBool(),
@@ -78,13 +82,14 @@ namespace AspDotNetCore3
 
             services.AddHttpContextAccessor();
 
-            // add authtication handler
+            // Add authtication handler
             services.AddAuthenticationCore(options =>
             {
                 options.DefaultScheme = "myScheme";
                 options.AddScheme<MyHandler>("myScheme", "demo scheme");
             });
 
+            // Add Controllers for API
             services.AddControllers(c =>
             {
                 //  c.Filters.Add(typeof(ExceptionFilter));
@@ -95,6 +100,7 @@ namespace AspDotNetCore3
                 option.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+            // Add Memory Cache
             services.AddMemoryCache();
 
             // Add MiniProfiler services
@@ -144,7 +150,7 @@ namespace AspDotNetCore3
             // Add IP Rate Limit
             services.AddIpPolicyRateLimit(Configuration);
 
-            // ADD Swagger
+            // Add Swagger
             services.AddSwaggerGen(options =>
             {
                 var basePath = AppContext.BaseDirectory;
@@ -207,9 +213,10 @@ namespace AspDotNetCore3
                     Db = 1
                 }));
 
-            // Add the processing server as IHostedService
+            // Add hangfire
             services.AddHangfireServer();
 
+            // Add Task scheduler
             services.AddJobService();
         }
 
@@ -240,8 +247,10 @@ namespace AspDotNetCore3
             // this is global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
+            // store static httpcontext for services 
             app.UseStaticHttpContext();
 
+            // 
             app.UseIpRateLimiting();
 
             if (env.IsDevelopment())
@@ -273,64 +282,50 @@ namespace AspDotNetCore3
             app.UseAuthorization();
 
             app.UseHangfireDashboard();
-
+            // open job services
             app.UseJob();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        private void ConfigureAuthentication(IApplicationBuilder app)
+        private void ConfigureMiddleware(IApplicationBuilder app)
         {
-            // 登录
-            app.Map("/login", builder => builder.Use(next =>
+            // 【Use】 make current context to next middleware
+            // 【Run】 make current context shutdown and return right now 
+
+            app.Map("/login", builder =>
+             builder.Use(next =>
+             {
+                 return async (context) =>
+                 {
+                     var claimIdentity = new ClaimsIdentity();
+                     claimIdentity.AddClaim(new Claim(ClaimTypes.Name, "Hal"));
+                     await context.SignInAsync("myScheme", new ClaimsPrincipal(claimIdentity));
+                     await next(context);
+                 };
+             }));
+
+            app.Map("/resource",
+                builder =>
+                builder.Run(
+                async (context) =>
+                    await context.Response.WriteAsync("Hello, ASP.NET Core!"))
+                );
+
+            // use middleware
+            app.Use(async (context, next) =>
             {
-                return async (context) =>
+                var user = context.User;
+                if (user?.Identity?.IsAuthenticated ?? false)
                 {
-                    var claimIdentity = new ClaimsIdentity();
-                    claimIdentity.AddClaim(new Claim(ClaimTypes.Name, "Hal"));
-                    await context.SignInAsync("myScheme", new ClaimsPrincipal(claimIdentity));
-                    await next(context);
-                };
-            }));
-
-            // 退出
-            app.Map("/logout", builder => builder.Use(next =>
-            {
-                return async (context) =>
+                    if (user.Identity.Name != "Hal") await context.ForbidAsync("myScheme");
+                    else await next();
+                }
+                else
                 {
-                    await context.SignOutAsync("myScheme");
-                    await next(context);
-                };
-            }));
-
-            //// 认证
-            //app.Use(next =>
-            //{
-            //    return async (context) =>
-            //    {
-            //        var result = await context.AuthenticateAsync("myScheme");
-            //        if (result?.Principal != null) context.User = result.Principal;
-            //        await next(context);
-            //    };
-            //});
-
-            //// 授权
-            //app.Use(async (context, next) =>
-            //{
-            //    var user = context.User;
-            //    if (user?.Identity?.IsAuthenticated ?? false)
-            //    {
-            //        if (user.Identity.Name != "Hal") await context.ForbidAsync("myScheme");
-            //        else await next();
-            //    }
-            //    else
-            //    {
-            //        await context.ChallengeAsync("myScheme");
-            //    }
-            //});
-
-            // 访问受保护资源
-            app.Map("/resource", builder => builder.Run(async (context) => await context.Response.WriteAsync("Hello, ASP.NET Core!")));
+                    await context.ChallengeAsync("myScheme");
+                }
+            });
         }
     }
 }
