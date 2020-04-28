@@ -22,14 +22,18 @@ namespace Tests.Services
         [Fact]
         public void TestMapper()
         {
+            var list = new List<MyModelX>();
             var model = new MyModelX()
             {
                 IDFX = "oxa1123ddf打"
             };
 
-            var dto = mapper.Map<MyModelXDto>(model);
+            list.Add(model);
+            // var dto = mapper.Map<MyModelXDto>(model);
+            var list1 = mapper.Map<List<MyModelXDto>>(list);
 
-            Assert.NotNull(dto);
+            //  Assert.NotNull(dto);
+            Assert.NotNull(list1);
         }
     }
 }

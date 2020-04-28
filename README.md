@@ -19,4 +19,4 @@ What we support now or in the future we will ?
 - Jwt token
 - Autofac
 - AutoMapper
-- So on
+- Shouldly

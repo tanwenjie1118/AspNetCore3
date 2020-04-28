@@ -1,6 +1,7 @@
 using AspDotNetCore3;
 using Core.Redis;
 using Core.SqlSugar;
+using Shouldly;
 using System;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
@@ -21,7 +22,16 @@ namespace Tests.Services
         {
             var coms = sqlSugar.GetList<COMPANY>();
 
-            Assert.NotNull(coms);
+            coms.ShouldNotBe(null);
+        }
+
+        [Fact]
+        public void GetPagedList()
+        {
+            var coms = sqlSugar.GetPagedList<COMPANY>(1, 2, out var tcount, out var psize);
+            tcount.ShouldBeGreaterThan(0);
+            psize.ShouldBeGreaterThan(0);
+            coms.ShouldNotBe(null);
         }
 
         [Fact]
@@ -44,7 +54,7 @@ namespace Tests.Services
                 SALARY = 44444444
             });
 
-            Assert.True(coms > 0);
+            coms.ShouldBeGreaterThan(0);
         }
 
         public class COMPANY
