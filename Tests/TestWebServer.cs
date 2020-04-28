@@ -9,6 +9,10 @@ using Autofac;
 
 namespace Tests
 {
+    /// <summary>
+    /// Run web service by startup class
+    /// </summary>
+    /// <typeparam name="TStartup"></typeparam>
     public class TestWebServer<TStartup> : IDisposable where TStartup : class
     {
         private readonly TestServer testServer;

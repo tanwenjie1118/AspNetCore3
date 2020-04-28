@@ -3,7 +3,7 @@ using Core.MongoDB;
 using System;
 using Xunit;
 
-namespace Tests
+namespace Tests.Services
 {
     public class MongodbTest
     {

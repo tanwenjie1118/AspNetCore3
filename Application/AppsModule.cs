@@ -1,11 +1,8 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Services.Application
+namespace Applications
 {
-    public class ServicesModule : Module
+    public class AppsModule : Module
     {
         /// <summary>
         /// Add types to autofac ioc container
@@ -13,7 +10,7 @@ namespace Services.Application
         /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType(typeof(JobServices)).As(typeof(IJobServices));
+
         }
     }
 }

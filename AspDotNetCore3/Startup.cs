@@ -10,6 +10,7 @@ using AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Core.MongoDB;
 using Core.Redis;
 using Hangfire;
@@ -36,11 +37,28 @@ namespace AspDotNetCore3
 {
     public class Startup
     {
-        // private IServiceCollection services;
+        private readonly Assembly[] assemblies;
         public Startup(IConfiguration configuration, IWebHostEnvironment Env)
         {
             Configuration = configuration;
             this.Env = Env;
+
+            // 扫描bin目录下所有程序集
+            var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
+            List<Assembly> assemblies = new List<Assembly>();
+            foreach (var filePath in dllFilePaths)
+            {
+                if (filePath.Contains("Core.dll")
+                    || filePath.Contains("Services.dll")
+                    || filePath.Contains("Infrastructure.dll")
+                    || filePath.Contains("Applications.dll"))
+                {
+                    var assembly = Assembly.LoadFrom(filePath);
+                    assemblies.Add(assembly);
+                }
+            }
+
+            this.assemblies = assemblies.ToArray();
         }
 
         public IConfiguration Configuration { get; }
@@ -213,6 +231,9 @@ namespace AspDotNetCore3
                     Db = 1
                 }));
 
+            // register profile
+            services.AddAutoMapper(assemblies);
+
             // Add hangfire
             services.AddHangfireServer();
 
@@ -223,22 +244,8 @@ namespace AspDotNetCore3
         // autofac container
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // 扫描bin目录下所有程序集
-            var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
-            List<Assembly> assemblies = new List<Assembly>();
-            foreach (var filePath in dllFilePaths)
-            {
-                if (filePath.Contains("Core.dll")
-                    || filePath.Contains("Services.dll")
-                    || filePath.Contains("Infrastructure.dll"))
-                {
-                    var assembly = Assembly.LoadFrom(filePath);
-                    assemblies.Add(assembly);
-                }
-            }
-
-            // 全局注册module
-            builder.RegisterAssemblyModules(assemblies.ToArray());
+            // register module
+            builder.RegisterAssemblyModules(assemblies);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -250,7 +257,10 @@ namespace AspDotNetCore3
             // store static httpcontext for services 
             app.UseStaticHttpContext();
 
-            // 
+            // store static automapper for services 
+            app.AddStaticAutoMapper();
+            
+            // ip access limit
             app.UseIpRateLimiting();
 
             if (env.IsDevelopment())

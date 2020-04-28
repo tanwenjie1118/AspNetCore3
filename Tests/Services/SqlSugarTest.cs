@@ -5,7 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
-namespace Tests
+namespace Tests.Services
 {
     public class SqlSugarTest
     {

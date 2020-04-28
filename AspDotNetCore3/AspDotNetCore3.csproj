@@ -44,9 +44,13 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.0-rc8" />
 		<PackageReference Include="Hangfire.Core" Version="1.7.*" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.*" />
+		<PackageReference Include="Autofac" Version="5.1.2" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="AutoMapper" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Application\Applications.csproj" />
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\Services\Services.csproj" />

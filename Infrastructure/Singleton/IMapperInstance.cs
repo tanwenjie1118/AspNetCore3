@@ -1,32 +1,33 @@
 ﻿using Autofac;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Infrastructure.Singleton
 {
-    public class AutofacContainer
+    public class IMapperInstance
     {
-        private AutofacContainer()
+        private IMapperInstance()
         {
-
         }
+
         private static readonly object obj = new object();
-        private static ILifetimeScope container;
-        public static ILifetimeScope Container
+        private static IMapper itself;
+        public static IMapper ItSelf
         {
             get
             {
 
-                return container;
+                return itself;
             }
             set
             {
                 lock (obj)
                 {
-                    if (container == null)
+                    if (itself == null)
                     {
-                        container = value;
+                        itself = value;
                     }
                 }
             }
