@@ -69,6 +69,8 @@ namespace AspDotNetCore3
         {
             services.AddSingleton(new Appsettings(Env.ContentRootPath));
 
+            services.AddHttpReports().UseMySqlStorage();
+
             //services.AddIdentityServer(option =>
             //{
             //    //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
@@ -239,6 +241,14 @@ namespace AspDotNetCore3
 
             // Add Task scheduler
             services.AddJobService();
+
+            // Add Dashboard for http reports
+            services.AddHttpReportsDashboard(opt =>
+            {
+                opt.UseHome = false;
+            }).UseMySqlStorage();
+
+            services.AddControllersWithViews();
         }
 
         // autofac container
@@ -254,12 +264,18 @@ namespace AspDotNetCore3
             // this is global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
+            // start http reports plugin
+            app.UseHttpReports();
+
+            // open http report dashboard service
+            app.UseHttpReportsDashboard();
+
             // store static httpcontext for services 
             app.UseStaticHttpContext();
 
             // store static automapper for services 
             app.AddStaticAutoMapper();
-            
+
             // ip access limit
             app.UseIpRateLimiting();
 
@@ -291,11 +307,20 @@ namespace AspDotNetCore3
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // open hangfire dashboard service
             app.UseHangfireDashboard();
+
             // open job services
             app.UseJob();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => { 
+                
+                endpoints.MapControllers();
+
+                endpoints.MapControllerRoute(
+                       name: "default",
+                       pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         private void ConfigureMiddleware(IApplicationBuilder app)
