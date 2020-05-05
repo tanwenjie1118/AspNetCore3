@@ -44,8 +44,6 @@ namespace AspDotNetCore3
                 builder.ClearProviders();//去掉默认添加的日志提供程序
                 builder.AddConsole();
                 builder.AddDebug();
-                builder.AddEventSourceLogger();
-                builder.AddEventLog();
             })
             .ConfigureWebHostDefaults(
             webBuilder =>

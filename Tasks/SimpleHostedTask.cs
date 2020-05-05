@@ -9,7 +9,7 @@ namespace Tasks
     public class SimpleHostedTask : IHostedService
     {
         private Timer timer;
-        private ILogger<SimpleHostedTask> logger;
+        private readonly ILogger<SimpleHostedTask> logger;
         public SimpleHostedTask(ILogger<SimpleHostedTask> logger)
         {
             this.logger = logger;

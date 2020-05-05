@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspDotNetCore3.Extensions;
+using AspDotNetCore3.Filters;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -29,7 +30,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 //using StackExchange.Profiling.Storage;
 
@@ -230,7 +233,7 @@ namespace AspDotNetCore3
                 .UseRedisStorage(Appsettings.app("Cache", "RedisConnection"),
                 new Hangfire.Redis.RedisStorageOptions()
                 {
-                    Db = 1
+                    Db = 0,
                 }));
 
             // register profile
@@ -248,6 +251,8 @@ namespace AspDotNetCore3
                 opt.UseHome = false;
             }).UseMySqlStorage();
 
+            // JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+
             services.AddControllersWithViews();
         }
 
@@ -264,12 +269,6 @@ namespace AspDotNetCore3
             // this is global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
-            // start http reports plugin
-            app.UseHttpReports();
-
-            // open http report dashboard service
-            app.UseHttpReportsDashboard();
-
             // store static httpcontext for services 
             app.UseStaticHttpContext();
 
@@ -279,10 +278,16 @@ namespace AspDotNetCore3
             // ip access limit
             app.UseIpRateLimiting();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+
+            // start http reports plugin
+            app.UseHttpReports();
+
+            // open http report dashboard service
+            app.UseHttpReportsDashboard();
 
             // ConfigureAuthentication(app);
             app.UseSwagger();
@@ -305,16 +310,19 @@ namespace AspDotNetCore3
             app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            // open hangfire dashboard service
-            app.UseHangfireDashboard();
-
+           // app.UseAuthorization();
+            
             // open job services
             app.UseJob();
 
-            app.UseEndpoints(endpoints => { 
-                
+            // open hangfire dashboard service
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new MyAuthorizationFilter() }
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapControllers();
 
                 endpoints.MapControllerRoute(

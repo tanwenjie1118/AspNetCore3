@@ -48,12 +48,16 @@ mysql -u root -p;
 create user 'sa'@'%' identified by '123456';
 flush privileges;
 create database HttpReports;
-grant all privileges on `HttpReports`.* to 'sa'@'localhost' identified by '123456' with grant option;
+grant all privileges on HttpReports.* to 'sa'@'%' with grant option;
 flush privileges;
 mysql -u sa -p;
 123456;
 show databases;
 ```
+
+### How To Run ?
+
+
 
 ### Portal
 
