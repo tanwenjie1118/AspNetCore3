@@ -55,9 +55,18 @@ mysql -u sa -p;
 show databases;
 ```
 
-### How To Run ?
+### How To Run in docker ?
 
+```shell
 
+docker pull redis
+docker pull mysql
+docker build -f AspDotNetCore3/Dockerfile -t myweb .
+
+docker run --network test_nets --name myredis  -p 6379:6379 -d redis
+docker run --network test_nets --name tmysql -p 3306:3306 -v /home/mysql:/var/lib/mysqll -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+docker run --network test_nets --name mycoreweb -p 5001:80 -d myweb:latest
+```
 
 ### Portal
 
