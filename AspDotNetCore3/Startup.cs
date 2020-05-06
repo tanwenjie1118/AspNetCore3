@@ -76,9 +76,8 @@ namespace AspDotNetCore3
 
             //services.AddIdentityServer(option =>
             //{
-            //    //可以通过此设置来指定登录路径，默认的登陆路径是/account/login
+            //    // default url 
             //    option.UserInteraction.LoginUrl = "/account/login";
-
             //});
 
             // Add redis
@@ -88,7 +87,7 @@ namespace AspDotNetCore3
                 options.UseCache(constr);
             });
 
-            // Add sqlsugar
+            // Add SqlSugar
             services.AddSqlSugar(option =>
             {
                 option.ConnectionString = Appsettings.app("Database", "Sqlite", "Conn");
@@ -103,9 +102,10 @@ namespace AspDotNetCore3
               Appsettings.app("Database", "Mongodb", "dbNo"),
               TimeSpan.FromMinutes(1)));
 
+            // Add Http context accessor
             services.AddHttpContextAccessor();
 
-            // Add authtication handler
+            // Add Authtication handler
             services.AddAuthenticationCore(options =>
             {
                 options.DefaultScheme = "myScheme";
@@ -236,10 +236,10 @@ namespace AspDotNetCore3
                     Db = 0,
                 }));
 
-            // register profile
+            // Add Register profile
             services.AddAutoMapper(assemblies);
 
-            // Add hangfire
+            // Add Hangfire
             services.AddHangfireServer();
 
             // Add Task scheduler
@@ -251,46 +251,39 @@ namespace AspDotNetCore3
                 opt.UseHome = false;
             }).UseMySqlStorage();
 
-            // JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-
+            // Add Route and Views for http reports
             services.AddControllersWithViews();
         }
 
-        // autofac container
+        // Autofac container
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // register module
+            // Register module
             builder.RegisterAssemblyModules(assemblies);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // this is global container
+            // Save to global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
-            // store static httpcontext for services 
+            // Add static httpcontext for services 
             app.UseStaticHttpContext();
 
-            // store static automapper for services 
+            // Add static automapper for services 
             app.AddStaticAutoMapper();
 
-            // ip access limit
+            // Active ip access limit
             app.UseIpRateLimiting();
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-            // start http reports plugin
-            app.UseHttpReports();
-
-            // open http report dashboard service
-            app.UseHttpReportsDashboard();
-
-            // ConfigureAuthentication(app);
             app.UseSwagger();
+
             app.UseSwaggerUI(c =>
             {
                 //根据版本名称倒序 遍历展示
@@ -304,22 +297,40 @@ namespace AspDotNetCore3
                 c.RoutePrefix = ""; //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
             });
 
+            // Use mini profiler
             app.UseMiniProfiler();
-            //  .UseIdentityServer()
+
+            // .UseIdentityServer()
+
+            // Use static files
             app.UseStaticFiles();
+
+            // Use routing
             app.UseRouting();
+
             app.UseHttpsRedirection();
+
+            // Authentication(
             app.UseAuthentication();
-           // app.UseAuthorization();
+
+            // Authorization
+            app.UseAuthorization();
             
-            // open job services
+            // Open user defined job services
             app.UseJob();
 
-            // open hangfire dashboard service
+            // Open hangfire dashboard service
+            // if release authorization filter must return true
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
                 Authorization = new[] { new MyAuthorizationFilter() }
             });
+
+            // Active http reports plugin
+            app.UseHttpReports();
+
+            // Active http report dashboard service
+            app.UseHttpReportsDashboard();
 
             app.UseEndpoints(endpoints =>
             {
