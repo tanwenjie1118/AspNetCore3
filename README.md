@@ -95,7 +95,7 @@ mysql -u -root -p
 
 ### Portal
 
-goto SwaggerUI：{host}/  OR  {host}/index.html
+goto SwaggerUI：{host}/  OR  {host}/swagger
 
 goto Hangfire ：{host}/hangfire 
 

@@ -45,7 +45,7 @@ namespace AspDotNetCore3
             Configuration = configuration;
             this.Env = Env;
 
-            // 扫描bin目录下所有程序集
+            // scan all dlls in this solution
             var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
             List<Assembly> assemblies = new List<Assembly>();
             foreach (var filePath in dllFilePaths)
@@ -185,42 +185,37 @@ namespace AspDotNetCore3
                     options.SwaggerDoc(version, new OpenApiInfo
                     {
                         Version = version,
-                        Title = $"{ApiName} 接口文档",
+                        Title = $"{ApiName} API Document",
                         Description = $"{ApiName} HTTP API " + version,
-                        //Contact = new OpenApiContact { Name = ApiName, Email = "Blog.Core@xxx.com", Url = new Uri("https://www.jianshu.com/u/94102b59cc2a") },
-                        //License = new OpenApiLicense { Name = ApiName, Url = new Uri("https://www.jianshu.com/u/94102b59cc2a") }
                     });
-                    // 接口排序
+
                     options.OrderActionsBy(o => o.RelativePath);
                 });
 
                 try
                 {
-                    //就是这里
-                    var xmlPath = Path.Combine(basePath, "AspDotNetCore3.xml");//这个就是刚刚配置的xml文件名
-                    options.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
+                    var xmlPath = Path.Combine(basePath, "AspDotNetCore3.xml");//xml doc
+                    options.IncludeXmlComments(xmlPath, true);//
 
-                    //var xmlModelPath = Path.Combine(basePath, "Blog.Core.Model.xml");//这个就是Model层的xml文件名
+                    //var xmlModelPath = Path.Combine(basePath, "Model.xml");//the model xml
                     //options.IncludeXmlComments(xmlModelPath);
                 }
                 catch (Exception ex)
                 {
-                    // log.Error("Blog.Core.xml和Blog.Core.Model.xml 丢失，请检查并拷贝。\n" + ex.Message);
+
                 }
 
                 options.OperationFilter<AddResponseHeadersFilter>();
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
 
-
-                // Token绑定到ConfigureServices
+                // Token binding to ConfigureServices
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
-                    Name = "Authorization",//jwt默认的参数名称
-                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
-                    Type = SecuritySchemeType.ApiKey
+                    Description = "Bearer {token}",
+                    Name = "Authorization",//jwt token name
+                    In = ParameterLocation.Header,// where
+                    Type = SecuritySchemeType.ApiKey // type
                 });
             });
 
@@ -264,6 +259,15 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.MapWhen(context => context.Request.Path == "/",
+             builder =>
+             builder.Run(
+              (context) =>
+              {
+                  context.Response.Redirect("/swagger/");
+                  return Task.CompletedTask;
+              }));
+
             // Save to global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
 
@@ -285,15 +289,16 @@ namespace AspDotNetCore3
 
             app.UseSwaggerUI(c =>
             {
-                //根据版本名称倒序 遍历展示
+                // according to version
                 var ApiName = Appsettings.app(new string[] { "Startup", "ApiName" });
                 typeof(SwaggerApiVersions).GetEnumNames().OrderByDescending(e => e).ToList().ForEach(version =>
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");
                 });
-                // 将swagger首页，设置成我们自定义的页面，记得这个字符串的写法：解决方案名.index.html
-                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("AspDotNetCore3.index.html");
-                c.RoutePrefix = ""; //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
+
+                // set swagger default page to user defined page ：{SolutionName}.index.html
+                // c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("AspDotNetCore3.index.html");
+                // c.RoutePrefix = "";
             });
 
             // Use mini profiler
@@ -314,7 +319,7 @@ namespace AspDotNetCore3
 
             // Authorization
             app.UseAuthorization();
-            
+
             // Open user defined job services
             app.UseJob();
 
@@ -364,6 +369,15 @@ namespace AspDotNetCore3
                 async (context) =>
                     await context.Response.WriteAsync("Hello, ASP.NET Core!"))
                 );
+
+            app.Map("/",
+                builder =>
+                builder.Run(
+                 (context) =>
+                 {
+                     context.Response.Redirect("/swagger");
+                     return Task.CompletedTask;
+                 }));
 
             // use middleware
             app.Use(async (context, next) =>

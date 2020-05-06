@@ -41,7 +41,7 @@ namespace AspDotNetCore3
            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureLogging((hostingContext, builder) =>
             {
-                builder.ClearProviders();//去掉默认添加的日志提供程序
+                builder.ClearProviders();//remove default providers
                 builder.AddConsole();
                 builder.AddDebug();
             })
