@@ -8,6 +8,8 @@
 		<PackageReference Include="Autofac" Version="5.1.2" />
 		<PackageReference Include="AutoMapper" Version="9.0.0" />
 		<PackageReference Include="Castle.Core" Version="4.4.0" />
+		<PackageReference Include="Hangfire.Core" Version="1.7.*" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

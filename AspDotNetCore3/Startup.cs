@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspDotNetCore3.Extensions;
-using AspDotNetCore3.Filters;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -323,7 +322,7 @@ namespace AspDotNetCore3
             // if release authorization filter must return true
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
-                Authorization = new[] { new MyAuthorizationFilter() }
+                Authorization = new[] { new HangfireAuthorizationFilter() }
             });
 
             // Active http reports plugin
