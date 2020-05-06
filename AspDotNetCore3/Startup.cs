@@ -259,7 +259,18 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.MapWhen(context => context.Request.Path == "/",
+            app.MapWhen(context =>
+            {
+                Console.WriteLine("==================> Current request path is " + context.Request.Path);
+                if (context.Request.Path == "/" || context.Request.Path == "/index.html")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            },
              builder =>
              builder.Run(
               (context) =>

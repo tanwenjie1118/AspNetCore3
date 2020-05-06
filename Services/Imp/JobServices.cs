@@ -18,9 +18,16 @@ namespace Services.Application
         public void Execute()
         {
             recurringJob.AddOrUpdate(
-                Guid.NewGuid().ToString(), Job.FromExpression(() => redis.SetKeyValue(Guid.NewGuid().ToString(), DateTime.Now.ToString(), null)),
+                Guid.NewGuid().ToString(),
+                Job.FromExpression(
+                () =>
+                redis.SetKeyValue(Guid.NewGuid().ToString(), DateTime.Now.ToString(), null)),
                 Cron.Minutely(),
-                new RecurringJobOptions() { QueueName = "jservice", TimeZone = TimeZoneInfo.Local });
+                new RecurringJobOptions()
+                {
+                    QueueName = "jservice",
+                    TimeZone = TimeZoneInfo.Utc
+                });
         }
     }
 }
