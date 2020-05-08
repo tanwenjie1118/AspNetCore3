@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -25,6 +26,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -72,6 +74,13 @@ namespace AspDotNetCore3
             services.AddSingleton(new Appsettings(Env.ContentRootPath));
 
             services.AddHttpReports().UseMySqlStorage();
+
+            // compression for response
+            services.AddResponseCompression();
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
 
             //services.AddIdentityServer(option =>
             //{
@@ -330,6 +339,9 @@ namespace AspDotNetCore3
 
             // Authorization
             app.UseAuthorization();
+
+            // Compression
+            app.UseResponseCompression();
 
             // Open user defined job services
             app.UseJob();

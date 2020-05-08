@@ -50,7 +50,7 @@ namespace Infrastructure.Domain
                 ObjectHelper.ToString(TicketSerializer.Default.Serialize(ticket)),
                 new CookieOptions()
                 {
-                    Expires = DateTime.Now.AddMinutes(1)
+                    Expires = DateTime.Now.AddHours(1)
                 });
             return Task.CompletedTask;
         }
