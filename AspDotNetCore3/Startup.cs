@@ -75,11 +75,16 @@ namespace AspDotNetCore3
 
             services.AddHttpReports().UseMySqlStorage();
 
-            // compression for response
-            services.AddResponseCompression();
-            services.Configure<GzipCompressionProviderOptions>(options =>
+            services.Configure<GzipCompressionProviderOptions>(
+            options =>
             {
                 options.Level = CompressionLevel.Fastest;
+            });
+
+            // compression for response
+            services.AddResponseCompression(opt =>
+            {
+                opt.Providers.Add<GzipCompressionProvider>();
             });
 
             //services.AddIdentityServer(option =>
@@ -90,10 +95,10 @@ namespace AspDotNetCore3
 
             // Add redis
             services.AddContext<RedisContext>(options =>
-            {
-                var constr = Appsettings.app("Cache", "RedisConnection");
-                options.UseCache(constr);
-            });
+        {
+            var constr = Appsettings.app("Cache", "RedisConnection");
+            options.UseCache(constr);
+        });
 
             // Add SqlSugar
             services.AddSqlSugar(option =>
