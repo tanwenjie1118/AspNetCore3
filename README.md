@@ -15,6 +15,7 @@
 - SqlSugar/EFCore
 - IdentityServer4
 - Files Manage Plugin
+- Gzip compression
 - Email Service
 - Jwt token
 - Autofac
@@ -69,6 +70,7 @@ docker build -f AspDotNetCore3/Dockerfile -t myweb .
 # Step3 Run our service from images in containers
 # -v mean Persistence
 # --networks mean services belong to same network segment by bridge mode
+docker network create test_nets
 docker run --network test_nets --name myredis -p 6379:6379 -v /redis/data:/redis/data -d redis
 docker run --network test_nets --name tmysql -p 3306:3306 -v /home/mysql:/var/lib/mysqll -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 docker run --network test_nets --name mycoreweb -p 5001:80 -d myweb:latest
