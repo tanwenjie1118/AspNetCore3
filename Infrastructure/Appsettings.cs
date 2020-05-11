@@ -12,35 +12,37 @@ namespace Infrastructure
 
         public Appsettings(string contentPath)
         {
-            string Path = "appsettings.json";
-
-            //如果你把配置文件 是 根据环境变量来分开了，可以这样写
-            //Path = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
+            // get configs by ASPNETCORE_ENVIRONMENT
+            var Path = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
 
             Configuration = new ConfigurationBuilder()
                .SetBasePath(contentPath)
-               .Add(new JsonConfigurationSource { Path = Path, Optional = false, ReloadOnChange = true })//这样的话，可以直接读目录里的json文件，而不是 bin 文件夹下的，所以不用修改复制属性
+               .Add(new JsonConfigurationSource { Path = Path, Optional = false, ReloadOnChange = true })
                .Build();
         }
 
         /// <summary>
-        /// 封装要操作的字符
+        /// Get value your want
         /// </summary>
-        /// <param name="sections">节点配置</param>
+        /// <param name="sections">nodes</param>
         /// <returns></returns>
-        public static string app(params string[] sections)
+        public static string Get(params string[] sections)
         {
             try
             {
-
                 if (sections.Any())
                 {
                     return Configuration[string.Join(":", sections)];
                 }
+                else
+                {
+                    throw new ArgumentNullException("sections");
+                }
             }
-            catch (Exception) { }
-
-            return "";
+            catch (Exception)
+            {
+                throw new InvalidOperationException("No such value");
+            }
         }
     }
 }

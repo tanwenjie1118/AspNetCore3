@@ -96,7 +96,7 @@ namespace AspDotNetCore3
             // Add redis
             services.AddContext<RedisContext>(options =>
         {
-            var constr = Appsettings.app("Cache", "RedisConnection");
+            var constr = Appsettings.Get("Cache", "RedisConnection");
             options.UseCache(constr);
         });
 
@@ -106,16 +106,16 @@ namespace AspDotNetCore3
             // Add SqlSugar
             services.AddSqlSugar(option =>
             {
-                option.ConnectionString = Appsettings.app("Database", "Sqlite", "Conn");
+                option.ConnectionString = Appsettings.Get("Database", "Sqlite", "Conn");
                 option.DbType = SqlSugar.DbType.Sqlite;
                 option.AutoClose = true;
             });
 
             // Add MongoDb
             services.AddMongoDbContext<MongoDbContext>((
-              Appsettings.app("Database", "Mongodb", "Conn"),
-              Appsettings.app("Database", "Mongodb", "Ssl").ToBool(),
-              Appsettings.app("Database", "Mongodb", "dbNo"),
+              Appsettings.Get("Database", "Mongodb", "Conn"),
+              Appsettings.Get("Database", "Mongodb", "Ssl").ToBool(),
+              Appsettings.Get("Database", "Mongodb", "dbNo"),
               TimeSpan.FromMinutes(1)));
 
             // Add Http context accessor
@@ -194,7 +194,7 @@ namespace AspDotNetCore3
             {
                 var basePath = AppContext.BaseDirectory;
                 //var basePath2 = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
-                var ApiName = Appsettings.app(new string[] { "Startup", "ApiName" });
+                var ApiName = Appsettings.Get(new string[] { "Startup", "ApiName" });
 
                 typeof(SwaggerApiVersions).GetEnumNames().ToList().ForEach(version =>
                 {
@@ -241,7 +241,7 @@ namespace AspDotNetCore3
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
-                .UseRedisStorage(Appsettings.app("Cache", "RedisConnection"),
+                .UseRedisStorage(Appsettings.Get("Cache", "RedisConnection"),
                 new Hangfire.Redis.RedisStorageOptions()
                 {
                     Db = 0,
@@ -318,7 +318,7 @@ namespace AspDotNetCore3
             app.UseSwaggerUI(c =>
             {
                 // according to version
-                var ApiName = Appsettings.app(new string[] { "Startup", "ApiName" });
+                var ApiName = Appsettings.Get(new string[] { "Startup", "ApiName" });
                 typeof(SwaggerApiVersions).GetEnumNames().OrderByDescending(e => e).ToList().ForEach(version =>
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");

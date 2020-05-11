@@ -41,7 +41,7 @@ namespace Tasks
             {
                 var hubContext = AutofacContainer.Container.Resolve<IHubContext<MyHub>>();
                 if (hubContext.Clients != null)
-                    await hubContext.Clients.All.SendAsync("ReceiveMessage", "logs", task);
+                    await hubContext.Clients.All.SendAsync("ReceiveMessage", "System", task);
             }
         }
     }
