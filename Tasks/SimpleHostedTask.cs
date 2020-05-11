@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Autofac;
+using Infrastructure.Domain;
+using Infrastructure.Singleton;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -10,6 +14,7 @@ namespace Tasks
     {
         private Timer timer;
         private readonly ILogger<SimpleHostedTask> logger;
+
         public SimpleHostedTask(ILogger<SimpleHostedTask> logger)
         {
             this.logger = logger;
@@ -27,9 +32,17 @@ namespace Tasks
             return Task.CompletedTask;
         }
 
-        private void RealWork(object x)
+        private async void RealWork(object x)
         {
-            logger.LogInformation("do hosted task at : " + DateTime.Now);
+            var task = "do hosted task at : " + DateTime.Now;
+            logger.LogInformation(task);
+
+            if (AutofacContainer.Container != null)
+            {
+                var hubContext = AutofacContainer.Container.Resolve<IHubContext<MyHub>>();
+                if (hubContext.Clients != null)
+                    await hubContext.Clients.All.SendAsync("ReceiveMessage", "logs", task);
+            }
         }
     }
 }

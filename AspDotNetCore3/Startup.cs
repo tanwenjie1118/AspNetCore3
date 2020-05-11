@@ -95,6 +95,9 @@ namespace AspDotNetCore3
                 options.UseCache(constr);
             });
 
+            // Add SignalR
+            services.AddSignalR();
+
             // Add SqlSugar
             services.AddSqlSugar(option =>
             {
@@ -362,7 +365,7 @@ namespace AspDotNetCore3
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
+                endpoints.MapHub<MyHub>("/myHub");
                 endpoints.MapControllerRoute(
                        name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");

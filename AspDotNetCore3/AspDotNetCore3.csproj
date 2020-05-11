@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <PlatformTarget>x64</PlatformTarget>
+	  <PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -42,13 +42,13 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.1.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.1.0" />
 		<PackageReference Include="NLog" Version="4.7.0" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.0-rc8" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.0" />
 		<PackageReference Include="Hangfire.Core" Version="1.7.*" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.*" />
 		<PackageReference Include="Autofac" Version="5.1.2" />

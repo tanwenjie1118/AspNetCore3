@@ -7,7 +7,7 @@ namespace AspDotNetCore3.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class HomeController : ControllerBase
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -20,6 +20,12 @@ namespace AspDotNetCore3.Controllers
         public string Index()
         {
             return "This is Index Page";
+        }
+
+        [HttpGet("signal")]
+        public IActionResult SignalR()
+        {
+            return View("SignalRMock");
         }
     }
 }
