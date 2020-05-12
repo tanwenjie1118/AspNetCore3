@@ -13,7 +13,8 @@ namespace Infrastructure
         public Appsettings(string contentPath)
         {
             // get configs by ASPNETCORE_ENVIRONMENT
-            var Path = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var Path = !string.IsNullOrWhiteSpace(env) ? $"appsettings.{env}.json" : "appsettings.json";
 
             Configuration = new ConfigurationBuilder()
                .SetBasePath(contentPath)
