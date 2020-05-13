@@ -367,6 +367,9 @@ namespace AspDotNetCore3
             // Active http report dashboard service
             app.UseHttpReportsDashboard();
 
+            // UseCors
+            app.UseCors("cors");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

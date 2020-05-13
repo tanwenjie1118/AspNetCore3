@@ -7,7 +7,7 @@ services:
     container_name: myredis_demo
     volumes:
     - /docker/redis/data:/redis/data
-  mysql:
+  tmysql:
     image: "mysql:latest"
     ports:
      - "3306:3306"
@@ -30,4 +30,4 @@ services:
      - "5001:80"
     depends_on:
      - myredis
-     - mysql
+     - tmysql
