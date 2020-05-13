@@ -2,6 +2,7 @@
 using Hangfire;
 using Hangfire.Common;
 using System;
+using System.Threading.Tasks;
 
 namespace Services.Application
 {
@@ -20,14 +21,24 @@ namespace Services.Application
             recurringJob.AddOrUpdate(
                 Guid.NewGuid().ToString(),
                 Job.FromExpression(
-                () =>
-                redis.SetKeyValue(Guid.NewGuid().ToString(), DateTime.Now.ToString(), null)),
-                Cron.Minutely(),
+                () => DoSomething().Wait()
+                // redis.SetKeyValue(Guid.NewGuid().ToString(), DateTime.Now.ToString(), null)
+                ),
+               "*/5 * * * * ?",//   Cron.Minutely(),
                 new RecurringJobOptions()
                 {
                     QueueName = "jservice",
                     TimeZone = TimeZoneInfo.Utc
                 });
+        }
+
+
+        public Task DoSomething()
+        {
+            return Task.Run(() =>
+            {
+                Console.WriteLine("============================== Now is : " + DateTime.Now.ToLongTimeString());
+            });
         }
     }
 }
