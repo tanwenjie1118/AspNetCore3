@@ -2,25 +2,26 @@
 
 ### What we support now or in the future we will ?
 
-- Mini Profiler
+- Mini Profiler based on memory cache
 - IP Rate Limit
 - Swagger
 - SignalR
-- Docker CI
+- Docker-compose
 - Hosted Task Service
-- Hangfire
-- Log4net/Nlog
-- Redis
-- MongoDB/SqlLite
-- SqlSugar/EFCore
-- IdentityServer4
-- Files Manage Plugin
+- Hangfire based on redis
+- NLog
+- MongoDB
+- HttpReports based on mysql 
+- SqlSugar based on sqllite3
 - Gzip compression
-- Email Service
-- Jwt token
 - Autofac
 - AutoMapper
 - Shouldly
+- IdentityServer4  (not implement)
+- EFCore  (not implement)
+- JWT token  (not implement)
+- Email Service  (not implement)
+- Files Manage Service  (not implement)
 
 ### How To Run in debugger mode
 
