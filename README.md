@@ -137,13 +137,14 @@ services:
 
 ### Portal
 
-go check SwaggerUI：{host}/  OR  {host}/swagger
+- go check SwaggerUI  => {host}/  OR  {host}/swagger
 
-go check Hangfire ：{host}/hangfire 
+- go check Hangfire  => {host}/hangfire 
 
-go check HttpReports ：{host}/httpreports
+- go check HttpReports  => {host}/httpreports
 
-go check SignalR：{host}/signal
+- go check SignalR => {host}/signal
 
+- go check MiniProfiler : => {host}/profiler/results-index
 
 
