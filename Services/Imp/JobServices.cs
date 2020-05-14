@@ -1,4 +1,5 @@
 ﻿using Core.Redis;
+using Core.SignalR;
 using Hangfire;
 using Hangfire.Common;
 using Microsoft.Extensions.Logging;
@@ -22,13 +23,15 @@ namespace Services.Application
 
         public void Execute()
         {
+            // RecurringJob.AddOrUpdate
+            var guid = Guid.NewGuid().ToString();
             recurringJob.AddOrUpdate(
-                Guid.NewGuid().ToString(),
+               guid,
                new Job(typeof(JobServices).GetMethod("Print")),
                 //Job.FromExpression(() => Console.WriteLine("==================> Now is time  ")),
-                "0/10 * * * * ?",
+                //"0/10 * * * * ?",
                 //redis.SetKeyValue(Guid.NewGuid().ToString(), DateTime.Now.ToString(), null)),
-                // Cron.Minutely(),
+                Cron.Minutely(),
                 new RecurringJobOptions()
                 {
                     //QueueName = "jservice",
@@ -47,8 +50,8 @@ namespace Services.Application
 
         public void Print()
         {
-            var task = "==================> Now is time  " + DateTime.Now;
-            Console.WriteLine(task);
+            var task = "hangfire job was finished at " + DateTime.Now;
+            logger.LogSignalRInformation(task);
         }
     }
 }

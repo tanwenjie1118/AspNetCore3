@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Core.SignalR;
 using Infrastructure.Domain;
 using Infrastructure.Singleton;
 using Microsoft.AspNetCore.SignalR;
@@ -32,17 +33,10 @@ namespace Tasks
             return Task.CompletedTask;
         }
 
-        private async void RealWork(object x)
+        private void RealWork(object x)
         {
-            var task = "do hosted task at : " + DateTime.Now;
-            logger.LogInformation(task);
-
-            if (AutofacContainer.Container != null)
-            {
-                var hubContext = AutofacContainer.Container.Resolve<IHubContext<MyHub>>();
-                if (hubContext.Clients != null)
-                    await hubContext.Clients.All.SendAsync("ReceiveMessage", "System", task);
-            }
+            var task = "self hosted timer job was finished at " + DateTime.Now;
+            logger.LogSignalRInformation(task);
         }
     }
 }

@@ -93,15 +93,57 @@ mysql -u -root -p
 ..
 ```
 
+### How to Run with Docker-compose
+
+```yaml
+# locate to dir where *.sln is
+
+version: '3'
+services:
+  myredis :
+    image: "redis:latest"
+    ports:
+     - "6379:6379"
+    container_name: myredis_demo
+    volumes:
+    - /docker/redis/data:/redis/data
+  tmysql:
+    image: "mysql:latest"
+    ports:
+     - "3306:3306"
+    restart: always
+    container_name: mysql_demo
+    environment:
+       MYSQL_ROOT_PASSWORD: 123456
+       MYSQL_DATABASE : HttpReports
+    volumes:
+     - /docker/mysql/data:/var/lib/mysql
+     - /docker/mysql/conf:/etc/mysql/conf.d
+  mycoreweb:
+    image: myweb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: mycoreweb
+    ports:
+     - "5001:80"
+    depends_on:
+     - myredis
+     - tmysql
+```
+
 
 
 ### Portal
 
-goto SwaggerUI：{host}/  OR  {host}/swagger
+go check SwaggerUI：{host}/  OR  {host}/swagger
 
-goto Hangfire ：{host}/hangfire 
+go check Hangfire ：{host}/hangfire 
 
-goto HttpReports ：{host}/httpreports
+go check HttpReports ：{host}/httpreports
+
+go check SignalR：{host}/signal
 
 
 
