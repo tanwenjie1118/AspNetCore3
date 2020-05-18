@@ -72,8 +72,10 @@ docker build -f AspDotNetCore3/Dockerfile -t myweb .
 # -v mean Persistence
 # --networks mean services belong to same network segment by bridge mode
 docker network create test_nets
-docker run --network test_nets --name myredis -p 6379:6379 -v /redis/data:/redis/data -d redis
-docker run --network test_nets --name tmysql -p 3306:3306 -v /home/mysql:/var/lib/mysqll -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+docker volume create data_redis
+docker volume create data_mysql
+docker run --network test_nets --name myredis -p 6379:6379 -v data_redis:/redis/data -d redis --appendonly yes
+docker run --network test_nets --name tmysql -p 3306:3306 -v data_mysql:/var/lib/mysqll -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 docker run --network test_nets --name mycoreweb -p 5001:80 -d myweb:latest
 
 ```
@@ -95,6 +97,8 @@ mysql -u -root -p
 ```
 
 ### How to Run with Docker-compose
+
+here is the docker-compose.yaml
 
 ```yaml
 # locate to dir where *.sln is
@@ -132,6 +136,18 @@ services:
     depends_on:
      - myredis
      - tmysql
+```
+
+here is the order
+
+```powershell
+cd to dir where .yaml is
+
+#build image
+docker-compose build
+
+#create container and start it
+docker-compose up -d
 ```
 
 

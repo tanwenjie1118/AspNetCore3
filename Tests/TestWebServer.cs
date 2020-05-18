@@ -25,6 +25,7 @@ namespace Tests
            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
            .ConfigureWebHostDefaults(webBuilder =>
            {
+               webBuilder.UseEnvironment("Development");
                webBuilder.UseStartup<TStartup>()
                .ConfigureLogging(log => { log.ClearProviders(); })
                .UseNLog();

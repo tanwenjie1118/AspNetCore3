@@ -12,6 +12,7 @@ using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Core.Entityframework;
 using Core.MongoDB;
 using Core.Redis;
 using Hangfire;
@@ -27,6 +28,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -71,7 +73,7 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new Appsettings(Env.ContentRootPath));
+            services.AddSingleton(new Appsettings(Env));
 
             services.AddHttpReports().UseMySqlStorage();
 
@@ -109,6 +111,13 @@ namespace AspDotNetCore3
                 option.ConnectionString = Appsettings.Get("Database", "Sqlite", "Conn");
                 option.DbType = SqlSugar.DbType.Sqlite;
                 option.AutoClose = true;
+            });
+
+            // Add EFCore 
+            services.AddDbContext<MyDbContext>(builder =>
+            {
+                var conn = Appsettings.Get("Database", "MySql", "Conn");
+                builder.UseMySQL(conn);
             });
 
             // Add MongoDb
@@ -180,9 +189,8 @@ namespace AspDotNetCore3
                     //var xmlModelPath = Path.Combine(basePath, "Model.xml");//the model xml
                     //options.IncludeXmlComments(xmlModelPath);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
                 }
 
                 options.OperationFilter<AddResponseHeadersFilter>();

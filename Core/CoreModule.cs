@@ -1,11 +1,10 @@
 ﻿using Autofac;
+using Core.Entityframework;
+using Core.Entityframework.Imp;
 using Core.MongoDB;
 using Core.Redis;
 using Core.SqlSugar;
 using Core.SqlSugar.Imp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core
 {
@@ -19,6 +18,7 @@ namespace Core
         {
             builder.RegisterType(typeof(RedisRepository)).As(typeof(IRedisRepository));
             builder.RegisterType(typeof(SqlSugarRepository)).As(typeof(ISqlSugarRepository));
+            builder.RegisterType(typeof(EFRepository)).As(typeof(IEFRepository));
             builder.RegisterGeneric(typeof(MongoDbRepository<>)).As(typeof(IMongoDbRepository<>));
         }
     }

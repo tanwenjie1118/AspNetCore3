@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using System;
 using System.Linq;
@@ -8,16 +9,17 @@ namespace Infrastructure
     public class Appsettings
     {
         static IConfiguration Configuration { get; set; }
-        static string contentPath { get; set; }
+        //static string contentPath { get; set; }
 
-        public Appsettings(string contentPath)
+        public Appsettings(IWebHostEnvironment env)
         {
             // get configs by ASPNETCORE_ENVIRONMENT
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var Path = !string.IsNullOrWhiteSpace(env) ? $"appsettings.{env}.json" : "appsettings.json";
+            //var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+           
+            var Path = !string.IsNullOrWhiteSpace(env.EnvironmentName) ? $"appsettings.{env.EnvironmentName}.json" : "appsettings.json";
 
             Configuration = new ConfigurationBuilder()
-               .SetBasePath(contentPath)
+               .SetBasePath(env.ContentRootPath)
                .Add(new JsonConfigurationSource { Path = Path, Optional = false, ReloadOnChange = true })
                .Build();
         }
