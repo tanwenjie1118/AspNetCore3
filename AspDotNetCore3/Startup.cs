@@ -18,6 +18,7 @@ using Core.Redis;
 using Hangfire;
 using Hangfire.Common;
 using Infrastructure;
+using Infrastructure.Configuration;
 using Infrastructure.Domain;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
@@ -25,6 +26,7 @@ using Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -73,6 +75,8 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
             services.AddSingleton(new Appsettings(Env));
 
             services.AddHttpReports().UseMySqlStorage();
@@ -245,27 +249,28 @@ namespace AspDotNetCore3
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
-            //app.MapWhen(context =>
-            //{
-            //    Console.WriteLine("==================> Current request path is " + context.Request.Path);
-            //    if (context.Request.Path == "/" || context.Request.Path == "/index.html")
-            //    {
-            //        return true;
-            //    }
-            //    else
-            //    {
-            //        return false;
-            //    }
-            //},
-            // builder =>
-            // builder.Run(
-            //  (context) =>
-            //  {
-            //      context.Response.Redirect("/swagger/");
-            //      return Task.CompletedTask;
-            //  }));
+            // return 200
+            app.UseHealthChecks("/health", new HealthCheckOptions()
+            {
+                ResultStatusCodes =
+            {
+                [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Healthy] = StatusCodes.Status200OK,
+                [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Degraded] = StatusCodes.Status503ServiceUnavailable,
+                [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+            }
+            });
+
+            app.RegisterConsul(lifetime, new ConsulServiceOption()
+            {
+                ServerHost = Appsettings.Get("Startup", "Consul", "ServerHost"),
+                ClientHost = Appsettings.Get("Startup", "Consul", "ClientHost"),
+                ClientIp = Appsettings.Get("Startup", "Consul", "ClientIp"),
+                ClientName = Appsettings.Get("Startup", "Consul", "ClientName"),
+                ClientPort = Appsettings.Get("Startup", "Consul", "ClientPort").ToInt(),
+                HealthCheckHttp = Appsettings.Get("Startup", "Consul", "HealthCheckHttp")
+            });
 
             // Save to global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
@@ -398,6 +403,28 @@ namespace AspDotNetCore3
                     await context.ChallengeAsync("myScheme");
                 }
             });
+
+
+            //app.MapWhen(context =>
+            //{
+            //    Console.WriteLine("==================> Current request path is " + context.Request.Path);
+            //    if (context.Request.Path == "/" || context.Request.Path == "/index.html")
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+            //},
+            // builder =>
+            // builder.Run(
+            //  (context) =>
+            //  {
+            //      context.Response.Redirect("/swagger/");
+            //      return Task.CompletedTask;
+            //  }));
+
         }
     }
 }

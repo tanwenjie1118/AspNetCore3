@@ -17,11 +17,12 @@
 - Autofac
 - AutoMapper
 - Shouldly
-- IdentityServer4  (not implement)
-- EFCore  (not implement)
+- EFCore  based on mysql 
+- Consul
 - JWT token  (not implement)
 - Email Service  (not implement)
-- Files Manage Service  (not implement)
+- IdentityServer4  (not implement)
+- More..
 
 ### How To Run in debugger mode
 
@@ -66,7 +67,7 @@ docker pull mysql
 
 # Step 2 build our own image from aspnet core web application
 # It should locate to dirctory where *.sln is 
-docker build -f AspDotNetCore3/Dockerfile -t myweb .
+docker build -f Dockerfile -t myweb .
 
 # Step3 Run our service from images in containers
 # -v mean Persistence
