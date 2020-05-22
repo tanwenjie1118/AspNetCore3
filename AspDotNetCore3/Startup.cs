@@ -75,9 +75,16 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks();
-
             services.AddSingleton(new Appsettings(Env));
+            var suopt = Configuration.BindConfig<StartupOption>();
+            var dbopt = Configuration.BindConfig<DatabaseOption>();
+            var cacheOpt = Configuration.BindConfig<CacheOption>();
+
+            services.AddConfig<StartupOption>(Configuration);
+            services.AddConfig<DatabaseOption>(Configuration);
+            services.AddConfig<CacheOption>(Configuration);
+
+            services.AddHealthChecks();
 
             services.AddHttpReports().UseMySqlStorage();
 
@@ -96,7 +103,7 @@ namespace AspDotNetCore3
             // Add redis
             services.AddContext<RedisContext>(options =>
             {
-                var constr = Appsettings.Get("Cache", "RedisConnection");
+                var constr = cacheOpt.RedisConnection;
                 options.UseCache(constr);
             });
 
@@ -106,10 +113,10 @@ namespace AspDotNetCore3
             // Add SqlSugar
             services.AddSqlSugar(option =>
             {
-                //option.ConnectionString = Appsettings.Get("Database", "Sqlite", "Conn");
+                //option.ConnectionString = dbopt.Sqlite.Conn;
                 //option.DbType = SqlSugar.DbType.Sqlite;
                 //option.AutoClose = true;
-                option.ConnectionString = Appsettings.Get("Database", "MySql", "Conn");
+                option.ConnectionString = dbopt.MySql.Conn;
                 option.DbType = SqlSugar.DbType.MySql;
                 option.AutoClose = true;
             });
@@ -117,15 +124,15 @@ namespace AspDotNetCore3
             // Add EFCore 
             services.AddDbContext<MyDbContext>(builder =>
             {
-                var conn = Appsettings.Get("Database", "MySql", "Conn");
+                var conn = dbopt.MySql.Conn;
                 builder.UseMySQL(conn).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             // Add MongoDb
             services.AddMongoDbContext<MongoDbContext>((
-              Appsettings.Get("Database", "Mongodb", "Conn"),
-              Appsettings.Get("Database", "Mongodb", "Ssl").ToBool(),
-              Appsettings.Get("Database", "Mongodb", "dbNo"),
+              dbopt.Mongodb.Conn,
+              dbopt.Mongodb.Ssl.ToBool(),
+              dbopt.Mongodb.DbNo,
               TimeSpan.FromMinutes(1)));
 
             // Add Http context accessor
@@ -167,7 +174,7 @@ namespace AspDotNetCore3
             {
                 var basePath = AppContext.BaseDirectory;
                 //var basePath2 = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
-                var ApiName = Appsettings.Get(new string[] { "Startup", "ApiName" });
+                var ApiName = suopt.ApiName;
 
                 typeof(SwaggerApiVersions).GetEnumNames().ToList().ForEach(version =>
                 {
@@ -213,7 +220,7 @@ namespace AspDotNetCore3
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
-                .UseRedisStorage(Appsettings.Get("Cache", "RedisConnection"),
+                .UseRedisStorage(cacheOpt.RedisConnection,
                 new Hangfire.Redis.RedisStorageOptions()
                 {
                     Db = 0,
@@ -248,6 +255,7 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
+            var suopt = app.ApplicationServices.GetService<StartupOption>();
             // return 200
             app.UseHealthChecks("/health", new HealthCheckOptions()
             {
@@ -259,15 +267,7 @@ namespace AspDotNetCore3
             }
             });
 
-            app.RegisterConsul(lifetime, new ConsulServiceOption()
-            {
-                ServerHost = Appsettings.Get("Startup", "Consul", "ServerHost"),
-                ClientHost = Appsettings.Get("Startup", "Consul", "ClientHost"),
-                ClientIp = Appsettings.Get("Startup", "Consul", "ClientIp"),
-                ClientName = Appsettings.Get("Startup", "Consul", "ClientName"),
-                ClientPort = Appsettings.Get("Startup", "Consul", "ClientPort").ToInt(),
-                HealthCheckHttp = Appsettings.Get("Startup", "Consul", "HealthCheckHttp")
-            });
+            app.RegisterConsul(lifetime, suopt.ConsulService);
 
             // Save to global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
@@ -291,7 +291,7 @@ namespace AspDotNetCore3
             app.UseSwaggerUI(c =>
             {
                 // according to version
-                var ApiName = Appsettings.Get(new string[] { "Startup", "ApiName" });
+                var ApiName = suopt.ApiName;
                 typeof(SwaggerApiVersions).GetEnumNames().OrderByDescending(e => e).ToList().ForEach(version =>
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");

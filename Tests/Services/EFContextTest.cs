@@ -3,6 +3,7 @@ using Core.Entityframework;
 using Core.Entityframework.Entities;
 using HttpReports.Dashboard.Implements;
 using Infrastructure;
+using Infrastructure.Configuration;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -18,15 +19,17 @@ namespace Tests.Services
     {
         private readonly TestWebServer<Startup> testWebServer = new TestWebServer<Startup>();
         private readonly IEFRepository dbcontext;
+        private readonly DatabaseOption dbOption;
         public EFContextTest()
         {
             dbcontext = testWebServer.Resolve<IEFRepository>();
+            dbOption = testWebServer.Resolve<DatabaseOption>();
         }
 
         [Fact]
         public void InitDatabaseModel()
         {
-            MyDbContext.Init(Appsettings.Get("Database", "MySql", "Conn"));
+            MyDbContext.Init(dbOption.MySql.Conn);
         }
 
         [Fact]

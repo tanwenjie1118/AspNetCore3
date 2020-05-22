@@ -6,7 +6,7 @@ using System;
 
 namespace AspDotNetCore3.Extensions
 {
-    public static class ConsulBuilderExtensions
+    public static class ConsulBuilderExtension
     {
         public static IApplicationBuilder RegisterConsul<TOption>(this IApplicationBuilder app, IHostApplicationLifetime lifetime, TOption option)
             where TOption : ConsulServiceOption
@@ -32,14 +32,20 @@ namespace AspDotNetCore3.Extensions
                 }
             };
 
-            // register
-            consulClient.Agent.ServiceRegister(registration).Wait();
-
-            // deregister
-            lifetime.ApplicationStopping.Register(() =>
+            try
             {
-                consulClient.Agent.ServiceDeregister(registration.ID).Wait();
-            });
+                // register
+                consulClient.Agent.ServiceRegister(registration).Wait();
+
+                // deregister
+                lifetime.ApplicationStopping.Register(() =>
+                {
+                    consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+                });
+            }
+            catch (Exception)
+            {
+            }
 
             return app;
         }
