@@ -1,8 +1,5 @@
 ﻿using Core.Entityframework.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Entityframework
 {
@@ -20,8 +17,10 @@ namespace Core.Entityframework
             modelBuilder.Entity<Company>(m =>
             {
                 m.HasKey(n => n.Id);
-                //m.Property(n => n.Name).HasMaxLength(50);//设置用户名最大长度为50个字符
-                //m.Property(n => n.Version).HasMaxLength(20).IsRequired();//设置密码不可空且最大20个字符
+                m.Property(n => n.Id).HasComment("Unique Identitier");
+                m.Property(n => n.Name).HasComment("Name of company");
+                m.Property(n => n.No).HasComment("The No");
+                m.Property(n => n.Version).HasComment("The Version");
             });
 
             base.OnModelCreating(modelBuilder);
@@ -30,12 +29,15 @@ namespace Core.Entityframework
         public static void Init(string conn)
         {
             var builder = new DbContextOptionsBuilder<MyDbContext>();
+            
+            // if mysql
             builder.UseMySQL(conn);
-            using (var db = new MyDbContext(builder.Options))
-            {
-                db.Database.EnsureCreated();
-                //db.Database.Migrate();
-            }
+
+            // if sqlserver
+            // builder.UseSqlServer(conn);
+            using var db = new MyDbContext(builder.Options);
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
         }
     }
 }

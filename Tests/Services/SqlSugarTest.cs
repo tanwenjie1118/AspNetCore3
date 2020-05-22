@@ -1,9 +1,13 @@
 using AspDotNetCore3;
+using Core.Entityframework.Entities;
 using Core.Redis;
 using Core.SqlSugar;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq;
 using Xunit;
 
 namespace Tests.Services
@@ -20,7 +24,7 @@ namespace Tests.Services
         [Fact]
         public void GetList()
         {
-            var coms = sqlSugar.GetList<COMPANY>();
+            var coms = sqlSugar.GetList<Company>();
 
             coms.ShouldNotBe(null);
         }
@@ -28,7 +32,7 @@ namespace Tests.Services
         [Fact]
         public void GetPagedList()
         {
-            var coms = sqlSugar.GetPagedList<COMPANY>(1, 2, out var tcount, out var psize);
+            var coms = sqlSugar.GetPagedList<Company>(1, 2, out var tcount, out var psize);
             tcount.ShouldBeGreaterThan(0);
             psize.ShouldBeGreaterThan(0);
             coms.ShouldNotBe(null);
@@ -37,7 +41,7 @@ namespace Tests.Services
         [Fact]
         public void GetFirst()
         {
-            var coms = sqlSugar.Get<COMPANY>(t => t.ID > 0);
+            var coms = sqlSugar.Get<Company>(t => t.Id > 0);
 
             Assert.NotNull(coms);
         }
@@ -45,26 +49,26 @@ namespace Tests.Services
         [Fact]
         public void InsertModel()
         {
-            var coms = sqlSugar.Insert(new COMPANY()
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var list = new List<Company>();
+            var range = Enumerable.Range(1, 10000).ToList();
+
+            range.ForEach((x) =>
             {
-                ID = 8,
-                ADDRESS = "aAAAAAAAAAAA",
-                AGE = 98,
-                NAME = "oooooooooooooooopppp",
-                SALARY = 44444444
+                list.Add(new Company()
+                {
+                    Name = "tan",
+                    No = new Random().Next(0, 9999).ToString(),
+                    Version = x.ToString()
+                });
             });
 
-            coms.ShouldBeGreaterThan(0);
-        }
+            var coms = sqlSugar.Insert(list);
+            sw.Stop();
 
-        public class COMPANY
-        {
-            [Key]
-            public int ID { get; set; }
-            public string NAME { get; set; }
-            public int AGE { get; set; }
-            public string ADDRESS { get; set; }
-            public decimal SALARY { get; set; }
+            var timespan = sw.ElapsedMilliseconds;
+            coms.ShouldBeGreaterThan(0);
         }
     }
 }

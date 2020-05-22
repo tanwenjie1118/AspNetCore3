@@ -93,18 +93,12 @@ namespace AspDotNetCore3
                 opt.Providers.Add<GzipCompressionProvider>();
             });
 
-            //services.AddIdentityServer(option =>
-            //{
-            //    // default url 
-            //    option.UserInteraction.LoginUrl = "/account/login";
-            //});
-
             // Add redis
             services.AddContext<RedisContext>(options =>
-        {
-            var constr = Appsettings.Get("Cache", "RedisConnection");
-            options.UseCache(constr);
-        });
+            {
+                var constr = Appsettings.Get("Cache", "RedisConnection");
+                options.UseCache(constr);
+            });
 
             // Add SignalR
             services.AddSignalR();
@@ -112,8 +106,11 @@ namespace AspDotNetCore3
             // Add SqlSugar
             services.AddSqlSugar(option =>
             {
-                option.ConnectionString = Appsettings.Get("Database", "Sqlite", "Conn");
-                option.DbType = SqlSugar.DbType.Sqlite;
+                //option.ConnectionString = Appsettings.Get("Database", "Sqlite", "Conn");
+                //option.DbType = SqlSugar.DbType.Sqlite;
+                //option.AutoClose = true;
+                option.ConnectionString = Appsettings.Get("Database", "MySql", "Conn");
+                option.DbType = SqlSugar.DbType.MySql;
                 option.AutoClose = true;
             });
 
@@ -121,7 +118,7 @@ namespace AspDotNetCore3
             services.AddDbContext<MyDbContext>(builder =>
             {
                 var conn = Appsettings.Get("Database", "MySql", "Conn");
-                builder.UseMySQL(conn);
+                builder.UseMySQL(conn).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             // Add MongoDb
@@ -304,8 +301,6 @@ namespace AspDotNetCore3
                 c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("AspDotNetCore3.index.html");
                 c.RoutePrefix = "";
             });
-
-            // .UseIdentityServer()
 
             // Use static files
             app.UseStaticFiles();
