@@ -18,7 +18,7 @@ services:
        MYSQL_DATABASE : HttpReports
     volumes:
      - /docker/mysql/data:/var/lib/mysql
-     - /docker/mysql/conf:/etc/mysql/conf.d
+     # - /docker/mysql/conf:/etc/mysql/conf.d
   mycoreweb:
     image: myweb:latest
     build:
