@@ -75,19 +75,23 @@ namespace AspDotNetCore3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new Appsettings(Env));
+            // Get config model from appsetting.{environment}.json
             var suopt = Configuration.BindConfig<StartupOption>();
             var dbopt = Configuration.BindConfig<DatabaseOption>();
             var cacheOpt = Configuration.BindConfig<CacheOption>();
 
+            // Add Option for service
             services.AddConfig<StartupOption>(Configuration);
             services.AddConfig<DatabaseOption>(Configuration);
             services.AddConfig<CacheOption>(Configuration);
 
+            // Add Health check
             services.AddHealthChecks();
 
+            // Add Httpreports with mysql
             services.AddHttpReports().UseMySqlStorage();
 
+            // Add Compression
             services.Configure<GzipCompressionProviderOptions>(
             options =>
             {
@@ -256,7 +260,8 @@ namespace AspDotNetCore3
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             var suopt = app.ApplicationServices.GetService<StartupOption>();
-            // return 200
+            
+            // health check return 200
             app.UseHealthChecks("/health", new HealthCheckOptions()
             {
                 ResultStatusCodes =
@@ -267,6 +272,7 @@ namespace AspDotNetCore3
             }
             });
 
+            // Register Consul to Consul Node
             app.RegisterConsul(lifetime, suopt.ConsulService);
 
             // Save to global container
@@ -286,8 +292,10 @@ namespace AspDotNetCore3
                 app.UseDeveloperExceptionPage();
             }
 
+            // Use Swagger
             app.UseSwagger();
 
+            // Use SwaggerUi
             app.UseSwaggerUI(c =>
             {
                 // according to version
@@ -308,6 +316,7 @@ namespace AspDotNetCore3
             // Use routing
             app.UseRouting();
 
+            // Use Https
             app.UseHttpsRedirection();
 
             // Authentication(
