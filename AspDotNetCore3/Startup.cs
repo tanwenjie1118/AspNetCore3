@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -141,6 +143,14 @@ namespace AspDotNetCore3
 
             // Add Http context accessor
             services.AddHttpContextAccessor();
+
+            // using System.Net;
+            //services.Configure<ForwardedHeadersOptions>(options =>
+            //{
+            //    //options.KnownProxies.Add(IPAddress.Parse("10.0.0.1"));
+            //});
+
+            services.AddCorsPolicy();
 
             // Add Authtication handler
             services.AddAuthenticationCore(options =>
@@ -260,7 +270,7 @@ namespace AspDotNetCore3
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             var suopt = app.ApplicationServices.GetService<StartupOption>();
-            
+
             // health check return 200
             app.UseHealthChecks("/health", new HealthCheckOptions()
             {
@@ -271,6 +281,9 @@ namespace AspDotNetCore3
                 [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
             }
             });
+
+            // UseCors
+            app.UseCors("cors");
 
             // Register Consul to Consul Node
             app.RegisterConsul(lifetime, suopt.ConsulService);
@@ -319,6 +332,15 @@ namespace AspDotNetCore3
             // Use Https
             app.UseHttpsRedirection();
 
+            // using Microsoft.AspNetCore.HttpOverrides;
+            // https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1#configure-nginx
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseAuthentication();
+
             // Authentication(
             app.UseAuthentication();
 
@@ -346,9 +368,6 @@ namespace AspDotNetCore3
 
             // Active http report dashboard service
             app.UseHttpReportsDashboard();
-
-            // UseCors
-            app.UseCors("cors");
 
             app.UseEndpoints(endpoints =>
             {

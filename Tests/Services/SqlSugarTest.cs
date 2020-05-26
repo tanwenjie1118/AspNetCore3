@@ -1,11 +1,10 @@
 using AspDotNetCore3;
-using Core.Entityframework.Entities;
-using Core.Redis;
+using Core.Entities;
 using Core.SqlSugar;
+using Infrastructure.Helpers;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using Xunit;
@@ -19,14 +18,6 @@ namespace Tests.Services
         public SqlSugarTest()
         {
             sqlSugar = testWebServer.Resolve<ISqlSugarRepository>();
-        }
-
-        [Fact]
-        public void GetList()
-        {
-            var coms = sqlSugar.GetList<Company>();
-
-            coms.ShouldNotBe(null);
         }
 
         [Fact]
@@ -70,5 +61,42 @@ namespace Tests.Services
             var timespan = sw.ElapsedMilliseconds;
             coms.ShouldBeGreaterThan(0);
         }
+
+        [Fact]
+        public void GetList()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            var list = sqlSugar.GetList<Company>();
+            sw.Stop();
+
+            var timespan = sw.ElapsedMilliseconds;
+
+            timespan.ShouldNotBe(0);
+
+            list.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void InsertUser()
+        {
+            var me = new User()
+            {
+                Account = "hal",
+                Psw = MD5Helper.MD5Encrypt("{password}"),
+                Email = "hal_tan@163.com",
+                MobilePhone = "1113333111",
+                Name = "hal tan",
+                NameIdentifier = "xx1133-111x1gg",
+                No = "001",
+                Role = "admin"
+            };
+
+            var coms = sqlSugar.Insert(me);
+
+            coms.ShouldBeGreaterThan(0);
+        }
+
     }
 }

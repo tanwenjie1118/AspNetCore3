@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Core.Entities;
+using Core.SqlSugar;
+using Infrastructure.Extensions;
+using Infrastructure.Helpers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,40 +15,58 @@ namespace AspDotNetCore3.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
+        private readonly ISqlSugarRepository sqlSugar;
 
-        public AccountController(ILogger<AccountController> logger)
+        public AccountController(ILogger<AccountController> logger, ISqlSugarRepository sqlSugar)
         {
             _logger = logger;
+            this.sqlSugar = sqlSugar;
         }
 
         [HttpGet("login")]
-        public ActionResult Login()
+        public ActionResult Login(string account, string psw)
         {
-            _logger.LogInformation("=========================Start Login =======================");
-            var di = new ClaimsIdentity("cookie");
-            di.AddClaim(new Claim(ClaimTypes.Name, "hal"));
-            di.AddClaim(new Claim(ClaimTypes.Email, "hal_tan@163.com"));
-            di.AddClaim(new Claim(ClaimTypes.MobilePhone, "1113333111"));
-            di.AddClaim(new Claim(ClaimTypes.NameIdentifier, "xx1133-111x1gg"));
-            di.AddClaim(new Claim(ClaimTypes.Role, "admin"));
-            var cp = new ClaimsPrincipal(di);
-            HttpContext.SignInAsync(cp,
-                new AuthenticationProperties()
+            if (string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(psw))
+            {
+                return BadRequest();
+            }
+
+            if (sqlSugar.Get<User>(t => t.Account == account) is var user && user.IsNotNull())
+            {
+                if (!(MD5Helper.MD5Encrypt(psw) == user.Psw))
                 {
-                    ExpiresUtc = DateTime.Now.AddMinutes(1)
-                }).Wait();
-            _logger.LogInformation("=========================Finish Login =======================");
-            return Redirect("/Home/Index");
+                    throw new Exception("Log in failed");
+                }
+            }
+
+            var di = new ClaimsIdentity("cookie");
+            di.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+            di.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+            di.AddClaim(new Claim(ClaimTypes.MobilePhone, user.MobilePhone));
+            di.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.NameIdentifier));
+            di.AddClaim(new Claim(ClaimTypes.Role, user.Role));
+            var cp = new ClaimsPrincipal(di);
+
+            var properties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTime.Now.AddMinutes(1)
+            };
+
+            HttpContext.SignInAsync(cp, properties).Wait();
+            
+            var ticket = new AuthenticationTicket(cp, properties, "myScheme");
+            
+            AuthenticateResult.Success(ticket);
+
+            return Content("Log in succeed");
         }
 
 
         [HttpGet("logout")]
         public ActionResult Logout()
         {
-            _logger.LogInformation("=========================Start Logout =======================");
             HttpContext.SignOutAsync().Wait();
-            _logger.LogInformation("=========================Finish Logout =======================");
-            return Redirect("/Home/Index");
+            return Content("Log out succeed");
         }
     }
 }

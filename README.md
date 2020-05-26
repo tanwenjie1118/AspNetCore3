@@ -1,3 +1,5 @@
+
+
 # This is an extension framework for Native AspNetCore 3.x
 
 ### What we support now or in the future we will ?
@@ -19,6 +21,7 @@
 - Shouldly
 - EFCore  based on mysql 
 - Consul
+- Nginx
 - JWT token  (not implement)
 - Email Service  (not implement)
 - IdentityServer4  (not implement)
@@ -149,6 +152,46 @@ docker-compose build
 
 #create container and start it
 docker-compose up -d
+```
+
+### How to Deploy reverse proxy with Nginx in docker
+
+here is the nginx.conf must have
+
+```shell
+user  nginx;
+# the num of process
+worker_processes  1;
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+events {
+	# the max num of connection
+    worker_connections  1024;
+}
+# http server config
+http {
+	server	 {
+   		 listen   80;
+   		 # server_name   example.com *.example.com;
+   		 location / {
+			 # host.docker.internal is an ip mapping in hosts in windows
+      		 proxy_pass         http://host.docker.internal:5000;
+     		 proxy_http_version 1.1;
+       		 proxy_set_header   Upgrade $http_upgrade;
+       		 proxy_set_header   Connection keep-alive;
+       		 proxy_set_header   Host $host;
+       		 proxy_cache_bypass $http_upgrade;
+       		 proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+       		 proxy_set_header   X-Forwarded-Proto $scheme;
+    	}
+	}
+}
+```
+
+here is the order of docker run
+
+```shell
+docker run --name docker_nginx -d -p 80:80 -v /docker/conf/nginx.conf:/etc/nginx nginx
 ```
 
 

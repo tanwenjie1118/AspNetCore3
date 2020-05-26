@@ -33,7 +33,7 @@ namespace Infrastructure.Domain
 
         public Task ChallengeAsync(AuthenticationProperties properties)
         {
-            Context.Response.Redirect("/account/login");
+            Context.Response.StatusCode = 401;
             return Task.CompletedTask;
         }
 
@@ -46,12 +46,15 @@ namespace Infrastructure.Domain
         public Task SignInAsync(ClaimsPrincipal user, AuthenticationProperties properties)
         {
             var ticket = new AuthenticationTicket(user, properties, Scheme.Name);
+
             Context.Response.Cookies.Append("myCookie",
                 ObjectHelper.ToString(TicketSerializer.Default.Serialize(ticket)),
                 new CookieOptions()
                 {
                     Expires = DateTime.Now.AddHours(1)
                 });
+
+            AuthenticateResult.Success(ticket);
             return Task.CompletedTask;
         }
 

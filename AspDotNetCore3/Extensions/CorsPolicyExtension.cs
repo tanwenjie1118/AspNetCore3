@@ -9,13 +9,12 @@ namespace AspDotNetCore3.Extensions
     /// </summary>
     public static class CorsPolicyExtension
     {
-        public static IServiceCollection AddCorsPolicy(this IServiceCollection serviceCollection, Action<SugarOption> option)
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddCors(option => option.AddPolicy("cors",
                 policy =>
                 policy.AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials()
                 .AllowAnyOrigin()));
 
             return serviceCollection;

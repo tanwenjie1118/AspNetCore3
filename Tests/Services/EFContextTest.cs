@@ -1,16 +1,12 @@
 ﻿using AspDotNetCore3;
+using Core.Entities;
 using Core.Entityframework;
-using Core.Entityframework.Entities;
-using HttpReports.Dashboard.Implements;
-using Infrastructure;
 using Infrastructure.Configuration;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace Tests.Services
@@ -55,6 +51,22 @@ namespace Tests.Services
 
             var timespan = sw.ElapsedMilliseconds;
             coms.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public void GetList()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            var list = dbcontext.GetList<Company>();
+            sw.Stop();
+
+            var timespan = sw.ElapsedMilliseconds;
+
+            timespan.ShouldNotBe(0);
+
+            list.ShouldNotBeNull();
         }
     }
 }

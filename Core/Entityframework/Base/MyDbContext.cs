@@ -1,4 +1,4 @@
-﻿using Core.Entityframework.Entities;
+﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entityframework
@@ -11,6 +11,7 @@ namespace Core.Entityframework
         }
 
         public DbSet<Company> Companies { set; get; }
+        public DbSet<User> Users { set; get; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
