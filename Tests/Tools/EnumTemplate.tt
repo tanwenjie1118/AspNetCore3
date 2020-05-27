@@ -1,0 +1,46 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Linq" #>
+<#@ assembly name="System.IO" #>
+<#@ assembly name="EPPlus.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="OfficeOpenXml" #>
+<#@ import namespace="System.Collections.Generic"#>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ include file="ModelManager.ttinclude"#>
+<#
+    var	fileManager = EntityFrameworkTemplateFileManager.Create(this);
+    var manager = new Manager();
+    var path = @"C:\Work\Study\AspNetCore3\Tests\Tools\template\EnumTemplate.xlsx";
+    manager.Init(path);
+    foreach(var name in manager.ModelNames){
+    fileManager.StartNewFile(name + ".cs");#>
+//------------------------------------------------------------------------------
+// 生成时间 <#=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")#> by hal tan
+//-----------------------------------------------------------------------------
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Enums
+{   
+    public enum <#=name#>
+    {
+      <# foreach(var item in manager.GetEnumTemplates(path,name)){#>
+       
+        /// <summary>
+        /// <#=item.ChineseName#>
+        /// </summary>
+        [Description("<#=item.ChineseName#>")]
+        <#=item.EnglishName#> = <#=item.Index#>,
+      <#}#> 
+      }
+}
+<#} fileManager.Process();#> 
