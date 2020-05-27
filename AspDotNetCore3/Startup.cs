@@ -247,7 +247,7 @@ namespace AspDotNetCore3
             services.AddHangfireServer();
 
             // Add Task scheduler
-            services.AddJobService();
+            //services.AddJobService();
 
             // Add Dashboard for http reports
             services.AddHttpReportsDashboard(opt =>
@@ -354,7 +354,7 @@ namespace AspDotNetCore3
             app.UseResponseCompression();
 
             // Open user defined job services
-            app.UseJob();
+            //app.UseJob();
 
             // Open hangfire dashboard service
             // if release authorization filter must return true

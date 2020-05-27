@@ -23,7 +23,7 @@ namespace AspDotNetCore3.Controllers
             this.sqlSugar = sqlSugar;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public ActionResult Login(string account, string psw)
         {
             if (string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(psw))
@@ -53,9 +53,9 @@ namespace AspDotNetCore3.Controllers
             };
 
             HttpContext.SignInAsync(cp, properties).Wait();
-            
+
             var ticket = new AuthenticationTicket(cp, properties, "myScheme");
-            
+
             AuthenticateResult.Success(ticket);
 
             return Content("Log in succeed");

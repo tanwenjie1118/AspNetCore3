@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace AspDotNetCore3.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class SignalController : Controller

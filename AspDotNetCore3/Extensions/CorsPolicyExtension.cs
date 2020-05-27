@@ -15,7 +15,8 @@ namespace AspDotNetCore3.Extensions
                 policy =>
                 policy.AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyOrigin()));
+                .AllowCredentials()
+                .WithOrigins("http://localhost")));
 
             return serviceCollection;
         }

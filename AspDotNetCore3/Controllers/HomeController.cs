@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AspDotNetCore3.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "myScheme", Roles = "admin")]
     [ApiController]
     [Route("[controller]")]
     public class HomeController : Controller
