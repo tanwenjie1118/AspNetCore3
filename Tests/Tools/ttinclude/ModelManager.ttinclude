@@ -6,7 +6,7 @@
 <#@ import namespace="System.IO"#>
 <#@ import namespace="System.Text"#>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating"#>
-<#@ assembly name="$(SolutionDir)\UnitTest\bin\Debug\EPPlus.dll" #>
+<#@ assembly name="$(SolutionDir)\Tests\bin\Debug\netcoreapp3.1\EPPlus.dll" #>
 <#@ import namespace="OfficeOpenXml" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.IO" #>
@@ -24,7 +24,7 @@ class Manager
             FileInfo newFile = new FileInfo(path);
             if (!newFile.Exists)
             {
-                throw new System.Exception("文件不存在");
+                throw new System.Exception("file not exist");
             }
 
             using (ExcelPackage package = new ExcelPackage(newFile))
@@ -72,7 +72,7 @@ class Manager
             FileInfo newFile = new FileInfo(path);
             if (!newFile.Exists)
             {
-                throw new System.Exception("文件不存在");
+                throw new System.Exception("file not exist");
             }
 
             using (ExcelPackage package = new ExcelPackage(newFile))
@@ -135,7 +135,7 @@ class Manager
             FileInfo newFile = new FileInfo(path);
             if (!newFile.Exists)
             {
-                throw new System.Exception("文件不存在");
+                throw new System.Exception("file not exist");
             }
 
             using (ExcelPackage package = new ExcelPackage(newFile))

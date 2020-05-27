@@ -22,7 +22,7 @@
     foreach(var name in manager.ModelNames){
     fileManager.StartNewFile(name + "Model.cs");#>
 //------------------------------------------------------------------------------
-// 生成时间 <#=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")#> by hal tan
+// CreateTime <#=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")#> by hal tan
 //-----------------------------------------------------------------------------
 
 using System.Collections.Generic;

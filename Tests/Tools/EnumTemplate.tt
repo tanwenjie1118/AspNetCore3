@@ -4,7 +4,7 @@
 <#@ assembly name="System.Xml" #>
 <#@ assembly name="System.Linq" #>
 <#@ assembly name="System.IO" #>
-<#@ assembly name="EPPlus.dll" #>
+<#@ assembly name="$(SolutionDir)\Tests\bin\Debug\netcoreapp3.1\EPPlus.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Data" #>
@@ -13,7 +13,7 @@
 <#@ import namespace="OfficeOpenXml" #>
 <#@ import namespace="System.Collections.Generic"#>
 <#@ include file="EF.Utility.CS.ttinclude"#>
-<#@ include file="ModelManager.ttinclude"#>
+<#@ include file="ttinclude/ModelManager.ttinclude"#>
 <#
     var	fileManager = EntityFrameworkTemplateFileManager.Create(this);
     var manager = new Manager();
@@ -22,7 +22,7 @@
     foreach(var name in manager.ModelNames){
     fileManager.StartNewFile(name + ".cs");#>
 //------------------------------------------------------------------------------
-// 生成时间 <#=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")#> by hal tan
+// CreateTime <#=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")#> by hal tan
 //-----------------------------------------------------------------------------
 using System;
 using System.ComponentModel;
