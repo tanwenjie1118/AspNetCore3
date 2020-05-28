@@ -1,23 +1,22 @@
 version: '3'
 services:
-  myredis :
+  myredis_demo :
     image: "redis:latest"
     ports:
-     - "6379:6379"
+    - "6379:6379"
     container_name: myredis_demo
     volumes:
     - /docker/redis/data:/redis/data
-  tmysql:
+  mysql_demo:
     image: "mysql:latest"
     ports:
-     - "3306:3306"
-    restart: always
+    - "3306:3306"
     container_name: mysql_demo
     environment:
        MYSQL_ROOT_PASSWORD: 123456
        MYSQL_DATABASE : HttpReports
     volumes:
-     - /docker/mysql/data:/var/lib/mysql
+    - /docker/mysql/data:/var/lib/mysql
      # - /docker/mysql/conf:/etc/mysql/conf.d
   mycoreweb:
     image: myweb:latest
@@ -27,7 +26,14 @@ services:
     restart: always
     container_name: mycoreweb
     ports:
-     - "5001:80"
+    - "5001:80"
     depends_on:
-     - myredis
-     - tmysql
+    - myredis_demo
+    - mysql_demo
+  mynginx:
+    image: "nginx:latest"
+    ports:
+      - "8080:80"
+    container_name: mynginx
+    volumes:
+    - /docker/conf/nginx.conf:/etc/nginx

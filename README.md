@@ -1,6 +1,6 @@
 
 
-# This is an extension framework for Native AspNetCore 3.x
+# Get Started
 
 ### What we support now or in the future we will ?
 
@@ -14,7 +14,7 @@
 - NLog
 - MongoDB
 - HttpReports based on mysql 
-- SqlSugar based on sqllite3
+- SqlSugar based on sqllite3/mysql
 - Gzip compression
 - Autofac
 - AutoMapper
@@ -22,16 +22,13 @@
 - EFCore  based on mysql 
 - Consul
 - Nginx
-- JWT token  (not implement)
 - Email Service  (not implement)
-- IdentityServer4  (not implement)
+- IdentityServer4  based on JWT token  (not implement)
 - More..
 
-### How To Run in debugger mode
+### How to add dependencies
 
 ###### Sqlite
-
-if you wanna do CURD with SqlSugar , sqlite3 must be installed.
 
 ```shell
 sqlite3 mydb.db
@@ -39,15 +36,11 @@ sqlite3 mydb.db
 
 ###### Redis
 
-if  you wanna run Hangfire to set jobs, then redis service should be started .
-
 ```shell
 sudo redis-server /etc/redis/redis.conf
 ```
 
 ###### Mysql 
-
-if you wanna active HttpReports , I choose mysql as its source in this project.
 
 ```shell
 mysql -u root -p;
@@ -61,7 +54,7 @@ mysql -u sa -p;
 show databases;
 ```
 
-### How To Run in docker ?
+### How to deploy in docker ?
 
 ```shell
 # Step1 pull images from docker hub
@@ -84,7 +77,7 @@ docker run --network test_nets --name mycoreweb -p 5001:80 -d myweb:latest
 
 ```
 
-PS: if you want enter someone service you can follow these orders
+Enter container
 
 ```shell
 docker exec -it myredis redis-cli
@@ -100,9 +93,9 @@ mysql -u -root -p
 ..
 ```
 
-### How to Run with Docker-compose
+### How to deploy with Docker-compose
 
-here is the docker-compose.yaml
+The docker-compose.yaml
 
 ```yaml
 # locate to dir where *.sln is
@@ -142,8 +135,6 @@ services:
      - tmysql
 ```
 
-here is the order
-
 ```powershell
 cd to dir where .yaml is
 
@@ -154,9 +145,9 @@ docker-compose build
 docker-compose up -d
 ```
 
-### How to Deploy reverse proxy with Nginx in docker
+### How to deploy reverse proxy with Nginx in docker
 
-here is the nginx.conf must have
+The nginx.conf
 
 ```shell
 user  nginx;
@@ -175,7 +166,7 @@ http {
    		 # server_name   example.com *.example.com;
    		 location / {
 			 # host.docker.internal is an ip mapping in hosts in windows
-      		 proxy_pass         http://host.docker.internal:5000;
+      		 proxy_pass         https://host.docker.internal:5001;
      		 proxy_http_version 1.1;
        		 proxy_set_header   Upgrade $http_upgrade;
        		 proxy_set_header   Connection keep-alive;
@@ -188,13 +179,31 @@ http {
 }
 ```
 
-here is the order of docker run
-
 ```shell
 docker run --name docker_nginx -d -p 80:80 -v /docker/conf/nginx.conf:/etc/nginx nginx
 ```
 
+### How to deploy Consul in docker
 
+```shell
+# create a cluster named consul1
+docker run -d -p 8500:8500 -v /data/consul:/consul/data -e CONSUL_BIND_INTERFACE='eth0' --name=consul1 consul agent -server -bootstrap -ui -client='0.0.0.0'
+
+# get the ip of consul1
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' consul1
+
+# if the ip is 172.17.0.2
+docker run -d --name=consul2 -e CONSUL_BIND_INTERFACE=eth0 consul agent --server=true --client=0.0.0.0 --join 172.17.0.2;
+docker run -d --name=consul3 -e CONSUL_BIND_INTERFACE=eth0 consul agent --server=true --client=0.0.0.0 --join 172.17.0.2;
+docker run -d --name=consul4 -e CONSUL_BIND_INTERFACE=eth0 consul agent --server=false --client=0.0.0.0 --join 172.17.0.2;
+
+# check the members of consul1
+docker exec -it consul1 consul members
+
+#if you want add more datacenters to this cluster =>
+#https://www.jianshu.com/p/df3ef9a4f456
+
+```
 
 ### Portal
 
