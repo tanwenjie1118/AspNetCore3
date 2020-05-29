@@ -18,7 +18,7 @@ namespace AspDotNetCore3.Controllers
         [HttpGet]
         public IActionResult SignalR()
         {
-            return View("SignalRMock");
+            return View();
         }
     }
 }
