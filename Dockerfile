@@ -5,6 +5,8 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https -ep ./AspDotNetCore3.pfx  -p 123tan
 WORKDIR /src
 COPY ["AspDotNetCore3/AspDotNetCore3.csproj", "AspDotNetCore3/"]
 RUN dotnet restore "AspDotNetCore3/AspDotNetCore3.csproj"

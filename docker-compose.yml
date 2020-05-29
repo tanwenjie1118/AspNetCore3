@@ -12,6 +12,8 @@ services:
     ports:
     - "3306:3306"
     container_name: mysql_demo
+    security_opt: 
+    - seccomp:unconfined
     environment:
        MYSQL_ROOT_PASSWORD: 123456
        MYSQL_DATABASE : HttpReports
@@ -25,15 +27,24 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: mycoreweb
+    environment:
+    #- ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=https://+:443;http://+:80
+    - ASPNETCORE_HTTPS_PORT=5000
+    #- ASPNETCORE_Kestrel__Certificates__Default__Password=123tan
+    - ASPNETCORE_Kestrel__Certificates__Default__Path=testCert.pfx
     ports:
     - "5001:80"
+    - "5000:443"
     depends_on:
     - myredis_demo
     - mysql_demo
+    - mynginx
   mynginx:
     image: "nginx:latest"
     ports:
       - "8080:80"
+    restart: always
     container_name: mynginx
     volumes:
-    - /docker/conf/nginx.conf:/etc/nginx
+    - C:/Users/hal_t/docker/conf/nginx.conf/:/etc/nginx/

@@ -1,6 +1,10 @@
 ﻿<#@ assembly name="System.Core"#>
 <#@ assembly name="EnvDTE"#>
 <#@ assembly name="System.Linq" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Linq" #>
+<#@ assembly name="System.IO" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic"#>
 <#@ import namespace="System.IO"#>
