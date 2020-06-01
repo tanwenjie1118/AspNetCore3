@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Autofac.Extensions.DependencyInjection;
 using NLog.Web;
+using Microsoft.Extensions.Configuration;
 
 namespace AspDotNetCore3
 {
@@ -31,21 +32,29 @@ namespace AspDotNetCore3
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-           .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .ConfigureLogging((hostingContext, builder) =>
-            {
-                builder.ClearProviders();//remove default providers
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var configuration = new ConfigurationBuilder().SetBasePath(Environment.CurrentDirectory)
+                                         .AddJsonFile("host.json")
+                                         .Build();
+
+            return Host.CreateDefaultBuilder(args)
+             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+              .ConfigureLogging((hostingContext, builder) =>
+              {
+                  builder.ClearProviders();//remove default providers
                 builder.AddConsole();
-                builder.AddDebug();
-            })
-            .ConfigureWebHostDefaults(
-            webBuilder =>
-            {
-                webBuilder
-                .UseUrls("http://+:80", "https://+:443")
-                .UseStartup<Startup>().UseNLog();
-            }).UseNLog();
+                  builder.AddDebug();
+              })
+              .ConfigureWebHostDefaults(
+              webBuilder =>
+              {
+                  var urls = string.Empty;
+                  webBuilder
+                  .UseConfiguration(configuration)
+                  .UseStartup<Startup>()
+                  .UseNLog();
+              }).UseNLog();
+        }
     }
 }
