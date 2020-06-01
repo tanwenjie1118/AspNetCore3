@@ -43,7 +43,9 @@ namespace AspDotNetCore3
             .ConfigureWebHostDefaults(
             webBuilder =>
             {
-                webBuilder.UseStartup<Startup>().UseNLog();
+                webBuilder
+                .UseUrls("http://+:80", "https://+:443")
+                .UseStartup<Startup>().UseNLog();
             }).UseNLog();
     }
 }

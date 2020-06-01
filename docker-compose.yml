@@ -27,6 +27,12 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: mycoreweb
+    environment: 
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_Kestrel__Certificates__Default__Password=123tan
+    - ASPNETCORE_Kestrel__Certificates__Default__Path=/etc/https/aspnetapp.pfx
+    volumes:
+      - D:/Study/AspNetCore3/https/:/etc/https/
     ports:
     - "5001:443"
     - "5000:80"
@@ -41,4 +47,4 @@ services:
     restart: always
     container_name: mynginx
     volumes:
-    - C:/Users/hal_t/docker/conf/nginx.conf/:/etc/nginx/
+    - D:/Study/AspNetCore3/nginx/:/etc/nginx/
