@@ -33,9 +33,9 @@ namespace Core.Redis
                 var redisConnect = ConnectionMultiplexer.Connect(configuration);
                 Redis = redisConnect.GetDatabase();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                // do nothing
+                throw;
             }
         }
     }

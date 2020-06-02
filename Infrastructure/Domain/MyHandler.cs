@@ -20,15 +20,15 @@ namespace Infrastructure.Domain
             return Task.CompletedTask;
         }
 
-        public async Task<AuthenticateResult> AuthenticateAsync()
+        public Task<AuthenticateResult> AuthenticateAsync()
         {
             var cookie = Context.Request.Cookies["myCookie"];
             if (string.IsNullOrEmpty(cookie))
             {
-                return AuthenticateResult.NoResult();
+                return Task.FromResult(AuthenticateResult.NoResult()) ;
             }
 
-            return AuthenticateResult.Success(TicketSerializer.Default.Deserialize(ObjectHelper.ToBytes(cookie)));
+            return Task.FromResult(AuthenticateResult.Success(TicketSerializer.Default.Deserialize(ObjectHelper.ToBytes(cookie))));
         }
 
         public Task ChallengeAsync(AuthenticationProperties properties)
