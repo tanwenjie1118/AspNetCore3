@@ -51,7 +51,7 @@ namespace Infrastructure.Helpers
         /// </summary>
         /// <param name="jwtStr"></param>
         /// <returns></returns>
-        public static TokenModelJwt SerilaizeJwt(string jwtStr)
+        public static TokenModelJwt DeEncrypt(string jwtStr)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
             JwtSecurityToken jwtToken = new JwtSecurityToken(jwtStr);
@@ -71,6 +71,7 @@ namespace Infrastructure.Helpers
                 Uid = long.Parse(jwtToken.Id),
                 Role = role != null ? role.ToString() : "",
             };
+
             return tm;
         }
     }

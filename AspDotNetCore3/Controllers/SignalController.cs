@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Infrastructure.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AspDotNetCore3.Controllers
 {
+    [HiddenApi]
     [ApiController]
     [Route("[controller]")]
     public class SignalController : Controller

@@ -168,19 +168,19 @@ namespace AspDotNetCore3
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    // key
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
-                    ValidateIssuer = true,
-                    ValidIssuer = suopt.Jwt.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = suopt.Jwt.Audience,
-                    RequireExpirationTime = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+               x.TokenValidationParameters = new TokenValidationParameters
+               {
+                   // key
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
+                   ValidateIssuer = true,
+                   ValidIssuer = suopt.Jwt.Issuer,
+                   ValidateAudience = true,
+                   ValidAudience = suopt.Jwt.Audience,
+                   RequireExpirationTime = true,
+                   ValidateLifetime = true,
+                   ClockSkew = TimeSpan.Zero
+               };
             });
 
             // Add Controllers for API
@@ -242,6 +242,7 @@ namespace AspDotNetCore3
                 options.OperationFilter<AddResponseHeadersFilter>();
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
+                options.DocumentFilter<HiddenApiFilter>();
 
                 // Token binding to ConfigureServices
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -360,9 +361,7 @@ namespace AspDotNetCore3
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            app.UseAuthentication();
-
-            // Authentication(
+            // Authentication
             app.UseAuthentication();
 
             // Authorization

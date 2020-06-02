@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace AspDotNetCore3.Controllers
 {
@@ -19,7 +20,9 @@ namespace AspDotNetCore3.Controllers
         [HttpGet]
         public string UserInfo()
         {
-            return "This is UserInfo !!!!!!!!!!";
+            var claim = HttpContext.User.FindFirst(ClaimTypes.Role);
+            
+            return claim.Value;
         }
     }
 }
