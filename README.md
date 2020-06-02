@@ -14,7 +14,7 @@
 - NLog
 - MongoDB
 - HttpReports based on mysql 
-- SqlSugar based on sqllite3/mysql
+- SqlSugar based on sqlite/mysql
 - Gzip compression
 - Autofac
 - AutoMapper
