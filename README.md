@@ -22,8 +22,7 @@
 - EFCore  based on mysql 
 - Consul
 - Nginx
-- Email Service  (not implement)
-- IdentityServer4  based on JWT token  (not implement)
+- Jwt token Authentication
 - More..
 
 ### How to add dependencies

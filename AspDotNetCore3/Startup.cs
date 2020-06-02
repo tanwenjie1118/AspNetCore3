@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
@@ -26,6 +27,7 @@ using Infrastructure.Filters;
 using Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +38,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -153,10 +156,31 @@ namespace AspDotNetCore3
             services.AddCorsPolicy();
 
             // Add Authtication handler
-            services.AddAuthenticationCore(options =>
+            // cookie
+            //services.AddAuthenticationCore(options =>
+            //{
+            //    options.DefaultScheme = "myScheme";
+            //    options.AddScheme<MyHandler>("myScheme", "demo scheme");
+            //});
+            services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "myScheme";
-                options.AddScheme<MyHandler>("myScheme", "demo scheme");
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // key
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
+                    ValidateIssuer = true,
+                    ValidIssuer = suopt.Jwt.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = suopt.Jwt.Audience,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
             // Add Controllers for API
@@ -290,9 +314,6 @@ namespace AspDotNetCore3
 
             // Save to global container
             AutofacContainer.Container = app.ApplicationServices.GetAutofacRoot();
-
-            // Add static httpcontext for services 
-            app.UseStaticHttpContext();
 
             // Add static automapper for services 
             app.AddStaticAutoMapper();

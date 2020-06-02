@@ -8,5 +8,6 @@ namespace Infrastructure.Configuration
     {
         public string ApiName { get; set; }
         public ConsulServiceOption ConsulService { get; set; }
+        public JwtBearerOption Jwt { get; set; }
     }
 }
