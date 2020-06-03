@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Core.Dapper;
+using Core.Dapper.Imp;
 using Core.Entityframework;
 using Core.Entityframework.Imp;
 using Core.MongoDB;
@@ -18,6 +20,7 @@ namespace Core
         {
             builder.RegisterType(typeof(RedisRepository)).As(typeof(IRedisRepository));
             builder.RegisterType(typeof(SqlSugarRepository)).As(typeof(ISqlSugarRepository));
+            builder.RegisterType(typeof(DapperRepository)).As(typeof(IDapperRepository));
             builder.RegisterType(typeof(EFRepository)).As(typeof(IEFRepository));
             builder.RegisterGeneric(typeof(MongoDbRepository<>)).As(typeof(IMongoDbRepository<>));
         }

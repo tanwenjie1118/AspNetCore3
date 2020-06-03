@@ -119,6 +119,9 @@ namespace AspDotNetCore3
             // Add SignalR
             services.AddSignalR();
 
+            // Add Dapper
+            services.AddDapper(option => option.UseMysql(dbopt.MySql.Conn));
+
             // Add SqlSugar
             services.AddSqlSugar(option =>
             {
@@ -168,19 +171,19 @@ namespace AspDotNetCore3
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-               x.TokenValidationParameters = new TokenValidationParameters
-               {
-                   // key
-                   ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
-                   ValidateIssuer = true,
-                   ValidIssuer = suopt.Jwt.Issuer,
-                   ValidateAudience = true,
-                   ValidAudience = suopt.Jwt.Audience,
-                   RequireExpirationTime = true,
-                   ValidateLifetime = true,
-                   ClockSkew = TimeSpan.Zero
-               };
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // key
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
+                    ValidateIssuer = true,
+                    ValidIssuer = suopt.Jwt.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = suopt.Jwt.Audience,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
             // Add Controllers for API

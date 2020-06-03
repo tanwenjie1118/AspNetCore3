@@ -23,12 +23,12 @@ namespace Core.Dapper.Imp
 
         public T Get<T>(Expression<Func<T, bool>> func = null)
         {
-            return connection.QueryFirstOrDefault<T>("selec *");
+            return connection.QueryFirstOrDefault<T>("select * from " + nameof(T));
         }
 
         public List<T> GetList<T>(Expression<Func<T, bool>> func = null)
         {
-            throw new NotImplementedException();
+            return connection.Query<T>("select * from " + nameof(T)).ToList();
         }
 
         public List<T> GetPagedList<T>(int pageIndex, int pageSize, out int totalCount, out int tatalPage, Expression<Func<T, bool>> func = null)
