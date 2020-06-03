@@ -1,6 +1,8 @@
+## Why start this project
 
+**This is a project for learning asp.net core ,and you can take it as your base project when you want start a new web application in .net platform.**
 
-# Get Started
+# 
 
 ### What we support now or in the future we will ?
 
@@ -214,6 +216,6 @@ docker exec -it consul1 consul members
 
 - go check SignalR => {host}/signal
 
-- go check MiniProfiler : => {host}/profiler/results-index
+- go check MiniProfiler => {host}/profiler/results-index
 
 
