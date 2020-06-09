@@ -16,6 +16,7 @@ namespace Core.SqlSugar.Imp
         }
 
         public T Get<T>(Expression<Func<T, bool>> func = null)
+            where T : class, new()
         {
             if (func == null) return db.Queryable<T>().First();
 
@@ -23,6 +24,7 @@ namespace Core.SqlSugar.Imp
         }
 
         public List<T> GetPagedList<T>(int pageIndex, int pageSize, out int totalCount, out int tatalPage, Expression<Func<T, bool>> func = null)
+            where T : class, new()
         {
             List<T> list;
             var counts = 0; var pages = 0;
@@ -40,7 +42,7 @@ namespace Core.SqlSugar.Imp
             return list;
         }
 
-        public List<T> GetList<T>(Expression<Func<T, bool>> func = null)
+        public List<T> GetList<T>(Expression<Func<T, bool>> func = null) where T : class, new()
         {
             if (func == null) return db.Queryable<T>().ToList();
 
@@ -60,6 +62,21 @@ namespace Core.SqlSugar.Imp
         public int Delete<T>(Expression<Func<T, bool>> func) where T : class, new()
         {
             return db.Deleteable<T>().Where(func).ExecuteCommand();
+        }
+
+        public int Delete<T>(T entity) where T : class, new()
+        {
+            return db.Deleteable(entity).ExecuteCommand();
+        }
+
+        public int Update<T>(T entity) where T : class, new()
+        {
+            return db.Updateable(entity).ExecuteCommand();
+        }
+
+        public int Update<T>(Expression<Func<T, T>> func) where T : class, new()
+        {
+            return db.Updateable(func).ExecuteCommand();
         }
     }
 }

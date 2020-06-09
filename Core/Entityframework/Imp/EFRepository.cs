@@ -19,21 +19,27 @@ namespace Core.Entityframework.Imp
             return db.SaveChanges();
         }
 
-        public T Get<T>(Expression<Func<T, bool>> func = null) where T : class
+        public int Delete<T>(T entity) where T : class, new()
+        {
+            db.Remove(entity);
+            return db.SaveChanges();
+        }
+
+        public T Get<T>(Expression<Func<T, bool>> func = null) where T : class, new()
         {
             if (func == null) return db.Set<T>().FirstOrDefault();
 
             return db.Set<T>().Where(func).FirstOrDefault();
         }
 
-        public List<T> GetList<T>(Expression<Func<T, bool>> func = null) where T : class
+        public List<T> GetList<T>(Expression<Func<T, bool>> func = null) where T : class, new()
         {
             if (func == null) return db.Set<T>().ToList();
 
             return db.Set<T>().Where(func).ToList();
         }
 
-        public List<T> GetPagedList<T>(int pageIndex, int pageSize, out int totalCount, out int tatalPage, Expression<Func<T, bool>> func = null) where T : class
+        public List<T> GetPagedList<T>(int pageIndex, int pageSize, out int totalCount, out int tatalPage, Expression<Func<T, bool>> func = null) where T : class, new()
         {
             var list = func == null ? db.Set<T>() : db.Set<T>().Where(func);
 
@@ -52,6 +58,19 @@ namespace Core.Entityframework.Imp
         public int Insert<T>(List<T> entities) where T : class, new()
         {
             db.AddRange(entities);
+            return db.SaveChanges();
+        }
+
+        public int Update<T>(T entity) where T : class, new()
+        {
+            db.Update(entity);
+            return db.SaveChanges();
+        }
+
+        public int Update<T>(Expression<Func<T, T>> func) where T : class, new()
+        {
+            var entities = db.Set<T>().Select(func);
+            db.Set<T>().UpdateRange(entities);
             return db.SaveChanges();
         }
     }

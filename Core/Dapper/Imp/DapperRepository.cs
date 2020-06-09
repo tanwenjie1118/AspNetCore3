@@ -19,24 +19,36 @@ namespace Core.Dapper.Imp
         {
             if (func == null)
                 return connection.CommandSet<T>().Delete();
+
             return connection.CommandSet<T>().Delete(Get(func));
         }
 
-        public T Get<T>(Expression<Func<T, bool>> func = null)
+        public int Delete<T>(T entity) where T : class, new()
+        {
+            if (entity == null)
+                throw new ArgumentNullException();
+
+            return connection.CommandSet<T>().Delete(entity);
+        }
+
+        public T Get<T>(Expression<Func<T, bool>> func = null) where T : class, new()
         {
             if (func == null)
                 return connection.QuerySet<T>().Get();
+
             return connection.QuerySet<T>().Where(func).Get();
         }
 
-        public List<T> GetList<T>(Expression<Func<T, bool>> func = null)
+        public List<T> GetList<T>(Expression<Func<T, bool>> func = null) where T : class, new()
         {
             if (func == null)
                 return connection.QuerySet<T>().ToList();
+
             return connection.QuerySet<T>().Where(func).ToList();
         }
 
         public List<T> GetPagedList<T>(int pageIndex, int pageSize, out int totalCount, out int tatalPage, Expression<Func<T, bool>> func = null)
+            where T : class, new()
         {
             var list = func == null ? connection.QuerySet<T>() : connection.QuerySet<T>().Where(func);
             var plist = list.PageList(pageIndex, pageSize);
@@ -53,6 +65,16 @@ namespace Core.Dapper.Imp
         public int Insert<T>(List<T> entities) where T : class, new()
         {
             return connection.CommandSet<T>().Insert(entities);
+        }
+
+        public int Update<T>(T entity) where T : class, new()
+        {
+            return connection.CommandSet<T>().Update(entity);
+        }
+
+        public int Update<T>(Expression<Func<T, T>> func) where T : class, new()
+        {
+            return connection.CommandSet<T>().Update(func);
         }
     }
 }
