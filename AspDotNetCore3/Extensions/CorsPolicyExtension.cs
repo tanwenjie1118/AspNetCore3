@@ -1,4 +1,5 @@
 ﻿using Hal.Core.SqlSugar.Base;
+using Hal.Infrastructure.Constant;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -11,7 +12,8 @@ namespace Hal.AspDotNetCore3.Extensions
     {
         public static IServiceCollection AddCorsPolicy(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddCors(option => option.AddPolicy("cors",
+            serviceCollection.AddCors(option => option.AddPolicy(
+                SystemConstant.CorsPolicy,
                 policy =>
                 policy.AllowAnyHeader()
                 .AllowAnyMethod()

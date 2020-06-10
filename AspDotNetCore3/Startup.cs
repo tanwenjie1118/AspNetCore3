@@ -44,6 +44,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
+using Hal.Infrastructure.Constant;
 //using StackExchange.Profiling.Storage;
 
 namespace Hal.AspDotNetCore3
@@ -57,11 +58,11 @@ namespace Hal.AspDotNetCore3
             this.Env = Env;
 
             // scan all dlls in this solution
-            var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
+            var dllFilePaths = Directory.GetFiles(AppContext.BaseDirectory, SystemConstant.AllDll);
             List<Assembly> assemblies = new List<Assembly>();
             foreach (var filePath in dllFilePaths)
             {
-                if (filePath.Contains("Hal", StringComparison.OrdinalIgnoreCase))
+                if (filePath.Contains(SystemConstant.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     var assembly = Assembly.LoadFrom(filePath);
                     assemblies.Add(assembly);
@@ -147,12 +148,6 @@ namespace Hal.AspDotNetCore3
             // Add Http context accessor
             services.AddHttpContextAccessor();
 
-            // using System.Net;
-            //services.Configure<ForwardedHeadersOptions>(options =>
-            //{
-            //    //options.KnownProxies.Add(IPAddress.Parse("10.0.0.1"));
-            //});
-
             services.AddCorsPolicy();
 
             // Add Authtication handler
@@ -201,7 +196,7 @@ namespace Hal.AspDotNetCore3
             // If using Entity Framework Hal.Core, add profiling for it as well (see the end)
             // Note .AddMiniProfiler() returns a IMiniProfilerBuilder for easy Intellisense
             services.AddMiniProfiler((opt) =>
-                     opt.RouteBasePath = "/profiler"
+                     opt.RouteBasePath = SystemConstant.MiniProfiler
                 ).AddEntityFramework();
 
             // Add IP Rate Limit
@@ -229,7 +224,7 @@ namespace Hal.AspDotNetCore3
 
                 try
                 {
-                    var xmlPath = Path.Combine(basePath, "Hal.AspDotNetCore3.xml");//xml doc
+                    var xmlPath = Path.Combine(basePath, SystemConstant.WebDllName);//xml doc
                     options.IncludeXmlComments(xmlPath, true);//
 
                     //var xmlModelPath = Path.Combine(basePath, "Model.xml");//the model xml
@@ -297,7 +292,7 @@ namespace Hal.AspDotNetCore3
             var suopt = app.ApplicationServices.GetService<StartupOption>();
 
             // health check return 200
-            app.UseHealthChecks("/health", new HealthCheckOptions()
+            app.UseHealthChecks(SystemConstant.Health, new HealthCheckOptions()
             {
                 ResultStatusCodes =
             {
@@ -308,7 +303,7 @@ namespace Hal.AspDotNetCore3
             });
 
             // UseCors
-            app.UseCors("cors");
+            app.UseCors(SystemConstant.CorsPolicy);
 
             // Register Consul to Consul Node
             app.RegisterConsul(lifetime, suopt.ConsulService);
@@ -341,7 +336,7 @@ namespace Hal.AspDotNetCore3
                 });
 
                 // set swagger default page to user defined page £º{SolutionName}.index.html
-                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("Hal.AspDotNetCore3.index.html");
+                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream(SystemConstant.SwaggerIndex);
                 c.RoutePrefix = "";
             });
 
@@ -378,7 +373,7 @@ namespace Hal.AspDotNetCore3
 
             // Open hangfire dashboard service
             // if release authorization filter must return true
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            app.UseHangfireDashboard(SystemConstant.Hangfire, new DashboardOptions
             {
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
@@ -392,7 +387,7 @@ namespace Hal.AspDotNetCore3
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<MyHub>("/myHub");
+                endpoints.MapHub<MyHub>(SystemConstant.SignalRHub);
                 endpoints.MapControllerRoute(
                        name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");
