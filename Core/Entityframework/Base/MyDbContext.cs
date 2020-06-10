@@ -1,7 +1,7 @@
-﻿using Core.Entities;
+﻿using Hal.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entityframework
+namespace Hal.Core.Entityframework
 {
     public class MyDbContext : DbContext
     {

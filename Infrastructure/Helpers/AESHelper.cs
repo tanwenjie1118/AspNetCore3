@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Infrastructure.Helpers
+namespace Hal.Infrastructure.Helpers
 {
     /// <summary>
     /// AES Helper

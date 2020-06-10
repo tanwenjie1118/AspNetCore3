@@ -1,10 +1,10 @@
-﻿using Infrastructure.Domain;
+﻿using Hal.Infrastructure.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Core.Dapper
+namespace Hal.Core.Dapper
 {
     public interface IDapperRepository: IRepository
     {

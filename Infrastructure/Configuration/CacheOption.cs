@@ -1,6 +1,6 @@
-﻿using Infrastructure.Configuration.InnerJson;
+﻿using Hal.Infrastructure.Configuration.InnerJson;
 
-namespace Infrastructure.Configuration
+namespace Hal.Infrastructure.Configuration
 {
     public class CacheOption
     {

@@ -1,11 +1,11 @@
-﻿using Core.MongoDB;
+﻿using Hal.Core.MongoDB;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     public static class MongoServiceCollectionExtensions
     {

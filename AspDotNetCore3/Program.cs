@@ -6,7 +6,7 @@ using Autofac.Extensions.DependencyInjection;
 using NLog.Web;
 using Microsoft.Extensions.Configuration;
 
-namespace AspDotNetCore3
+namespace Hal.AspDotNetCore3
 {
     public class Program
     {

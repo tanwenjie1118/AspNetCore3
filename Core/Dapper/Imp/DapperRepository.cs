@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
-using Core.Dapper.Base;
+using Hal.Core.Dapper.Base;
 using System.Data;
 using Kogel.Dapper.Extension.MySql;
-namespace Core.Dapper.Imp
+namespace Hal.Core.Dapper.Imp
 {
     public class DapperRepository : IDapperRepository
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Infrastructure.Helpers;
+using Hal.Infrastructure.Helpers;
 
-namespace Infrastructure.Middlewares
+namespace Hal.Infrastructure.Middlewares
 {
     public class JwtTokenAuthMiddleware
     {

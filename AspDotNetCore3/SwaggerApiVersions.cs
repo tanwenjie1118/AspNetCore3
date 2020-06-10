@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspDotNetCore3
+namespace Hal.AspDotNetCore3
 {
     public enum SwaggerApiVersions
     {

@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AspDotNetCore3": {
+    "Hal.AspDotNetCore3": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

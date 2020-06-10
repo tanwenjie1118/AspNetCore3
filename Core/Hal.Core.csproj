@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<AssemblyName>Core</AssemblyName>
-		<RootNamespace>Core</RootNamespace>
+		<AssemblyName>Hal.Core</AssemblyName>
+		<RootNamespace>Hal.Core</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	  <ProjectReference Include="..\Infrastructure\Hal.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

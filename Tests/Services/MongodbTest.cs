@@ -1,9 +1,9 @@
-using AspDotNetCore3;
-using Core.MongoDB;
+using Hal.AspDotNetCore3;
+using Hal.Core.MongoDB;
 using System;
 using Xunit;
 
-namespace Tests.Services
+namespace Tests.Hal.Services
 {
     public class MongodbTest
     {

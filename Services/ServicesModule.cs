@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Services.Application
+namespace Hal.Services.Application
 {
     public class ServicesModule : Module
     {

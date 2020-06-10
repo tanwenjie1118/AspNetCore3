@@ -2,7 +2,7 @@
 using StackExchange.Redis;
 using System;
 
-namespace Core.Redis
+namespace Hal.Core.Redis
 {
     public class RedisCient
     {

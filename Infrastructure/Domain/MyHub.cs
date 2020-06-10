@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Domain
+namespace Hal.Infrastructure.Domain
 {
     public class MyHub : Hub
     {

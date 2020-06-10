@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Services.Model
+namespace Hal.Services.Model
 {
     public class MyModelX
     {

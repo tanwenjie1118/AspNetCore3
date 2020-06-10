@@ -59,15 +59,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Application\Applications.csproj" />
-		<ProjectReference Include="..\Core\Core.csproj" />
-		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-		<ProjectReference Include="..\Services\Services.csproj" />
-		<ProjectReference Include="..\Tasks\Tasks.csproj" />
+		<ProjectReference Include="..\Application\Hal.Applications.csproj" />
+		<ProjectReference Include="..\Core\Hal.Core.csproj" />
+		<ProjectReference Include="..\Infrastructure\Hal.Infrastructure.csproj" />
+		<ProjectReference Include="..\Services\Hal.Services.csproj" />
+		<ProjectReference Include="..\Tasks\Hal.Tasks.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="AspDotNetCore3.xml">
+		<None Update="Hal.AspDotNetCore3.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

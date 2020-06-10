@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Services.Application
+namespace Hal.Services.Application
 {
     public interface IJobServices
     {

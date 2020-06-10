@@ -1,14 +1,14 @@
-﻿using Applications.Model;
-using AspDotNetCore3;
+﻿using Hal.Applications.Model;
+using Hal.AspDotNetCore3;
 using AutoMapper;
-using Infrastructure.Singleton;
-using Services.Model;
+using Hal.Infrastructure.Singleton;
+using Hal.Services.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Tests.Services
+namespace Tests.Hal.Services
 {
     public class AutoMapperTest
     {

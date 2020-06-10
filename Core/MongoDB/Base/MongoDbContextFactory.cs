@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.MongoDB
+namespace Hal.Core.MongoDB
 {
     public static class MongoDbContextFactory
     {

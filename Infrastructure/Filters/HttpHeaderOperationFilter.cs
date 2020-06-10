@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Infrastructure.Filters
+namespace Hal.Infrastructure.Filters
 {
     /// <summary>
     /// swagger request header

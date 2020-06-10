@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using SqlSugar;
 
-namespace Core.SqlSugar.Base
+namespace Hal.Core.SqlSugar.Base
 {
     public class SugarContext
     {

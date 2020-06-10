@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>AspDotNetCore3</name>
+        <name>Hal.AspDotNetCore3</name>
     </assembly>
     <members>
-        <member name="F:AspDotNetCore3.SwaggerApiVersions.V1">
+        <member name="F:Hal.AspDotNetCore3.SwaggerApiVersions.V1">
             <summary>
             V1 版本
             </summary>
         </member>
-        <member name="F:AspDotNetCore3.SwaggerApiVersions.V2">
+        <member name="F:Hal.AspDotNetCore3.SwaggerApiVersions.V2">
             <summary>
             V2 版本
             </summary>

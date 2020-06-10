@@ -4,7 +4,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using System.Data.SqlClient;
 using DbType = SqlSugar.DbType;
-namespace Core.Dapper.Base
+namespace Hal.Core.Dapper.Base
 {
     public class DapperContext
     {

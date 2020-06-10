@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Applications
+namespace Hal.Applications
 {
     public class AppsModule : Module
     {

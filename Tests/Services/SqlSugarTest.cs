@@ -1,7 +1,7 @@
-using AspDotNetCore3;
-using Core.Entities;
-using Core.SqlSugar;
-using Infrastructure.Helpers;
+using Hal.AspDotNetCore3;
+using Hal.Core.Entities;
+using Hal.Core.SqlSugar;
+using Hal.Infrastructure.Helpers;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
-namespace Tests.Services
+namespace Tests.Hal.Services
 {
     public class SqlSugarTest
     {

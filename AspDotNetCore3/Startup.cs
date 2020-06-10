@@ -9,22 +9,22 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AspDotNetCore3.Extensions;
+using Hal.AspDotNetCore3.Extensions;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Core.Entityframework;
-using Core.MongoDB;
-using Core.Redis;
+using Hal.Core.Entityframework;
+using Hal.Core.MongoDB;
+using Hal.Core.Redis;
 using Hangfire;
 using Hangfire.Common;
-using Infrastructure;
-using Infrastructure.Configuration;
-using Infrastructure.Domain;
-using Infrastructure.Extensions;
-using Infrastructure.Filters;
-using Infrastructure.Singleton;
+using Hal.Infrastructure;
+using Hal.Infrastructure.Configuration;
+using Hal.Infrastructure.Domain;
+using Hal.Infrastructure.Extensions;
+using Hal.Infrastructure.Filters;
+using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -46,7 +46,7 @@ using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 //using StackExchange.Profiling.Storage;
 
-namespace AspDotNetCore3
+namespace Hal.AspDotNetCore3
 {
     public class Startup
     {
@@ -61,10 +61,7 @@ namespace AspDotNetCore3
             List<Assembly> assemblies = new List<Assembly>();
             foreach (var filePath in dllFilePaths)
             {
-                if (filePath.Contains("Core.dll")
-                    || filePath.Contains("Services.dll")
-                    || filePath.Contains("Infrastructure.dll")
-                    || filePath.Contains("Applications.dll"))
+                if (filePath.Contains("Hal", StringComparison.OrdinalIgnoreCase))
                 {
                     var assembly = Assembly.LoadFrom(filePath);
                     assemblies.Add(assembly);
@@ -201,7 +198,7 @@ namespace AspDotNetCore3
             services.AddMemoryCache();
 
             // Add MiniProfiler services
-            // If using Entity Framework Core, add profiling for it as well (see the end)
+            // If using Entity Framework Hal.Core, add profiling for it as well (see the end)
             // Note .AddMiniProfiler() returns a IMiniProfilerBuilder for easy Intellisense
             services.AddMiniProfiler((opt) =>
                      opt.RouteBasePath = "/profiler"
@@ -232,7 +229,7 @@ namespace AspDotNetCore3
 
                 try
                 {
-                    var xmlPath = Path.Combine(basePath, "AspDotNetCore3.xml");//xml doc
+                    var xmlPath = Path.Combine(basePath, "Hal.AspDotNetCore3.xml");//xml doc
                     options.IncludeXmlComments(xmlPath, true);//
 
                     //var xmlModelPath = Path.Combine(basePath, "Model.xml");//the model xml
@@ -344,7 +341,7 @@ namespace AspDotNetCore3
                 });
 
                 // set swagger default page to user defined page £º{SolutionName}.index.html
-                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("AspDotNetCore3.index.html");
+                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("Hal.AspDotNetCore3.index.html");
                 c.RoutePrefix = "";
             });
 
@@ -423,7 +420,7 @@ namespace AspDotNetCore3
                 builder =>
                 builder.Run(
                 async (context) =>
-                    await context.Response.WriteAsync("Hello, ASP.NET Core!"))
+                    await context.Response.WriteAsync("Hello, ASP.NET Hal.Core!"))
                 );
 
             app.Map("/",

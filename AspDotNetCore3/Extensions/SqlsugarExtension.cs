@@ -1,8 +1,8 @@
-﻿using Core.SqlSugar.Base;
+﻿using Hal.Core.SqlSugar.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     /// <summary>
     /// SqlSugar

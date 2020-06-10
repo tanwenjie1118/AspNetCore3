@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Core.Entities
+namespace Hal.Core.Entities
 {
     [Table("User")]
     public class User

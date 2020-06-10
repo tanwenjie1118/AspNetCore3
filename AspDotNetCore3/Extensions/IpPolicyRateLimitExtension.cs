@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     /// <summary>
     /// Cors 启动服务

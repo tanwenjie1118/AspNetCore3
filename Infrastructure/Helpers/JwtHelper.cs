@@ -1,4 +1,4 @@
-﻿using Infrastructure.Configuration;
+﻿using Hal.Infrastructure.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Helpers
+namespace Hal.Infrastructure.Helpers
 {
     public class JwtHelper
     {

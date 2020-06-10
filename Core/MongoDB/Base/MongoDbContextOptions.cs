@@ -8,7 +8,7 @@
 
 using System;
 
-namespace Core.MongoDB
+namespace Hal.Core.MongoDB
 {
     public class MongoDbContextOptions
     {

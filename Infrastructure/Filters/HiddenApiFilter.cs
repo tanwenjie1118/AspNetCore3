@@ -1,4 +1,4 @@
-﻿using Infrastructure.Attributes;
+﻿using Hal.Infrastructure.Attributes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Infrastructure.Filters
+namespace Hal.Infrastructure.Filters
 {
     /// <summary>
     /// Swagger api hidden filter

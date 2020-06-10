@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Core.Entities
+namespace Hal.Core.Entities
 {
     [Table("Company")]
     public class Company

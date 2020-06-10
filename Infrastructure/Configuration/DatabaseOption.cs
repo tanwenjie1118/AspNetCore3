@@ -1,9 +1,9 @@
-﻿using Infrastructure.Configuration.InnerJson;
+﻿using Hal.Infrastructure.Configuration.InnerJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Configuration
+namespace Hal.Infrastructure.Configuration
 {
     public class DatabaseOption
     {

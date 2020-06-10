@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Applications.Model
+namespace Hal.Applications.Model
 {
     public class MyModelXDto
     {

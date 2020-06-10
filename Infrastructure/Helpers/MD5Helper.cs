@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Infrastructure.Helpers
+namespace Hal.Infrastructure.Helpers
 {
     /// <summary>
     /// MD5Helper

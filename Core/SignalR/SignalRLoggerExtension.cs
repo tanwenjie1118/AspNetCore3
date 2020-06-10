@@ -1,13 +1,13 @@
 ﻿using Autofac;
-using Infrastructure.Domain;
-using Infrastructure.Singleton;
+using Hal.Infrastructure.Domain;
+using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.SignalR
+namespace Hal.Core.SignalR
 {
     public static class SignalRLoggerExtension
     {

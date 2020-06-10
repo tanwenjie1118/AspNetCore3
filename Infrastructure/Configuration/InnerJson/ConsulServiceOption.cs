@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Configuration
+﻿namespace Hal.Infrastructure.Configuration
 {
     public class ConsulServiceOption
     {

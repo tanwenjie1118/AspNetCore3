@@ -1,6 +1,6 @@
 ﻿
 
-namespace Core.Redis
+namespace Hal.Core.Redis
 {
     public interface IRedisRepository
     {

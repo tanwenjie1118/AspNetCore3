@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Core.MongoDB
+namespace Hal.Core.MongoDB
 {
     /// <summary>
     /// mongodb repository 实现类.

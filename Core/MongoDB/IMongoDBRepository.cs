@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Core.MongoDB
+namespace Hal.Core.MongoDB
 {
     /// <summary>
     /// mongo db 通用仓储接口.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Configuration
+namespace Hal.Infrastructure.Configuration
 {
     public class StartupOption
     {

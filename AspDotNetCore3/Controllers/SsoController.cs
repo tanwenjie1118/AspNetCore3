@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Core.Entities;
-using Core.SqlSugar;
-using Infrastructure.Configuration;
-using Infrastructure.Extensions;
-using Infrastructure.Helpers;
-using Infrastructure.Singleton;
+using Hal.Core.Entities;
+using Hal.Core.SqlSugar;
+using Hal.Infrastructure.Configuration;
+using Hal.Infrastructure.Extensions;
+using Hal.Infrastructure.Helpers;
+using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 
-namespace AspDotNetCore3.Controllers
+namespace Hal.AspDotNetCore3.Controllers
 {
     [ApiController]
     [AllowAnonymous]

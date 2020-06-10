@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Core.SignalR;
-using Infrastructure.Domain;
-using Infrastructure.Singleton;
+using Hal.Core.SignalR;
+using Hal.Infrastructure.Domain;
+using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tasks
+namespace Hal.Tasks
 {
     public class SimpleHostedTask : IHostedService
     {

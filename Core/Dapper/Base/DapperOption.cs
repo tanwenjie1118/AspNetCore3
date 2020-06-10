@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Dapper.Base
+namespace Hal.Core.Dapper.Base
 {
     public class DapperOption
     {

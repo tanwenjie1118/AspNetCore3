@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 
-namespace Core.Redis
+namespace Hal.Core.Redis
 {
     public class RedisContextOptions : IOptions<RedisContextOptions>
     {

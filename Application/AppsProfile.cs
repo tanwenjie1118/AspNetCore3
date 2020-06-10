@@ -1,9 +1,9 @@
-﻿using Applications.Model;
+﻿using Hal.Applications.Model;
 using AutoMapper;
-using Services.Model;
+using Hal.Services.Model;
 using System;
 
-namespace Applications
+namespace Hal.Applications
 {
     public class AppsProfile : Profile
     {

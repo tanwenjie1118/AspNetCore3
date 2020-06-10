@@ -29,9 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Applications.csproj" />
-    <ProjectReference Include="..\AspDotNetCore3\AspDotNetCore3.csproj" />
-    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Application\Hal.Applications.csproj" />
+    <ProjectReference Include="..\AspDotNetCore3\Hal.AspDotNetCore3.csproj" />
+    <ProjectReference Include="..\Core\Hal.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

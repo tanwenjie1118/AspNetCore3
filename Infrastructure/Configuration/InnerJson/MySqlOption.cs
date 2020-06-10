@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Configuration.InnerJson
+namespace Hal.Infrastructure.Configuration.InnerJson
 {
    public class MySqlOption
     {

@@ -3651,7 +3651,7 @@ var HttpConnection = /** @class */ (function () {
                                             throw new Error(negotiateResponse.error);
                                         }
                                         if (negotiateResponse.ProtocolVersion) {
-                                            throw new Error("Detected a connection attempt to an ASP.NET SignalR Server. This client only supports connecting to an ASP.NET Core SignalR Server. See https://aka.ms/signalr-core-differences for details.");
+                                            throw new Error("Detected a connection attempt to an ASP.NET SignalR Server. This client only supports connecting to an ASP.NET Hal.Core SignalR Server. See https://aka.ms/signalr-core-differences for details.");
                                         }
                                         if (negotiateResponse.url) {
                                             url = negotiateResponse.url;

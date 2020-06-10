@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Infrastructure.Domain
+namespace Hal.Infrastructure.Domain
 {
     public interface IRepository
     {

@@ -1,10 +1,10 @@
 ﻿using Consul;
-using Infrastructure.Configuration;
+using Hal.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     public static class ConsulBuilderExtension
     {

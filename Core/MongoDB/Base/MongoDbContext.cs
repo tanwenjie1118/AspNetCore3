@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 
-namespace Core.MongoDB
+namespace Hal.Core.MongoDB
 {
     public class MongoDbContext
     {

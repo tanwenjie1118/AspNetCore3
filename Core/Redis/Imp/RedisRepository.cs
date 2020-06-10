@@ -1,7 +1,7 @@
 ﻿using StackExchange.Redis;
 using System;
 
-namespace Core.Redis
+namespace Hal.Core.Redis
 {
     /// <summary>
     /// Redis cache 统一仓储接口.

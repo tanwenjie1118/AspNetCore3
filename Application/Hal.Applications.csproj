@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Applications</AssemblyName>
+    <AssemblyName>Hal.Applications</AssemblyName>
   </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="5.1.2" />
 		<PackageReference Include="AutoMapper" Version="9.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Services\Services.csproj" />
+	  <ProjectReference Include="..\Services\Hal.Services.csproj" />
 	</ItemGroup>
 
 </Project>

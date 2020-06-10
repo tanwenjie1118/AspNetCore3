@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Infrastructure.Extensions
+namespace Hal.Infrastructure.Extensions
 {
     public static class ConfigurationExtension
     {

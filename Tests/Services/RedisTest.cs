@@ -1,9 +1,9 @@
-using AspDotNetCore3;
-using Core.Redis;
+using Hal.AspDotNetCore3;
+using Hal.Core.Redis;
 using System;
 using Xunit;
 
-namespace Tests.Services
+namespace Tests.Hal.Services
 {
     public class RedisTest
     {

@@ -1,5 +1,5 @@
-﻿using Core.Redis;
-using Core.SignalR;
+﻿using Hal.Core.Redis;
+using Hal.Core.SignalR;
 using Hangfire;
 using Hangfire.Common;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Services.Application
+namespace Hal.Services.Application
 {
     public class JobServices : IJobServices
     {

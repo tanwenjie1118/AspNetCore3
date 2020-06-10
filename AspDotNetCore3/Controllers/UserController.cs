@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
-namespace AspDotNetCore3.Controllers
+namespace Hal.AspDotNetCore3.Controllers
 {
     [Authorize]
     [ApiController]

@@ -1,8 +1,8 @@
-﻿using Infrastructure.Extensions;
+﻿using Hal.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     public static class ConfigBuilderExtension
     {

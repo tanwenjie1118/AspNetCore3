@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Singleton
+namespace Hal.Infrastructure.Singleton
 {
     public class IMapperInstance
     {

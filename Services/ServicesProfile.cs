@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Services.Model;
+using Hal.Services.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Services
+namespace Hal.Services
 {
     public class ServicesProfile : Profile
     {

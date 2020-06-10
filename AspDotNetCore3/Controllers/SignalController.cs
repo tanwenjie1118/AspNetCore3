@@ -1,9 +1,9 @@
-﻿using Infrastructure.Attributes;
+﻿using Hal.Infrastructure.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace AspDotNetCore3.Controllers
+namespace Hal.AspDotNetCore3.Controllers
 {
     [HiddenApi]
     [ApiController]

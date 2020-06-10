@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Attributes
+namespace Hal.Infrastructure.Attributes
 {
     /// <summary>
     /// Swagger api hidden attribute

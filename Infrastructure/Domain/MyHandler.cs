@@ -1,4 +1,4 @@
-﻿using Infrastructure.Helpers;
+﻿using Hal.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -6,7 +6,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Domain
+namespace Hal.Infrastructure.Domain
 {
     public class MyHandler : IAuthenticationHandler, IAuthenticationSignInHandler, IAuthenticationSignOutHandler
     {

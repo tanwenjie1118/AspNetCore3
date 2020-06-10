@@ -1,11 +1,11 @@
-﻿using Core.SqlSugar.Base;
+﻿using Hal.Core.SqlSugar.Base;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Core.SqlSugar.Imp
+namespace Hal.Core.SqlSugar.Imp
 {
     public class SqlSugarRepository : ISqlSugarRepository
     {

@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using AutoMapper;
-using Infrastructure.Singleton;
+using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Builder;
 
-namespace AspDotNetCore3.Extensions
+namespace Hal.AspDotNetCore3.Extensions
 {
     public static class AutoMapperExtension
     {

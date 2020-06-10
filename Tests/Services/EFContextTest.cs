@@ -1,7 +1,7 @@
-﻿using AspDotNetCore3;
-using Core.Entities;
-using Core.Entityframework;
-using Infrastructure.Configuration;
+﻿using Hal.AspDotNetCore3;
+using Hal.Core.Entities;
+using Hal.Core.Entityframework;
+using Hal.Infrastructure.Configuration;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
-namespace Tests.Services
+namespace Tests.Hal.Services
 {
     public class EFContextTest
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Intercepts
+namespace Hal.Infrastructure.Intercepts
 {
     public class AuditLogIntercept : IInterceptor
     {

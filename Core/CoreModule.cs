@@ -1,14 +1,14 @@
 ﻿using Autofac;
-using Core.Dapper;
-using Core.Dapper.Imp;
-using Core.Entityframework;
-using Core.Entityframework.Imp;
-using Core.MongoDB;
-using Core.Redis;
-using Core.SqlSugar;
-using Core.SqlSugar.Imp;
+using Hal.Core.Dapper;
+using Hal.Core.Dapper.Imp;
+using Hal.Core.Entityframework;
+using Hal.Core.Entityframework.Imp;
+using Hal.Core.MongoDB;
+using Hal.Core.Redis;
+using Hal.Core.SqlSugar;
+using Hal.Core.SqlSugar.Imp;
 
-namespace Core
+namespace Hal.Core
 {
     public class CoreModule : Module
     {
