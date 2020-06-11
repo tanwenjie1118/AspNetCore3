@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Hal.AspDotNetCore3.Extensions;
+using Hal.Core.Extensions;
 using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;

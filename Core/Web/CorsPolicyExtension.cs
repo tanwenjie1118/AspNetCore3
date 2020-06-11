@@ -3,7 +3,7 @@ using Hal.Infrastructure.Constant;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Hal.AspDotNetCore3.Extensions
+namespace Hal.Core.Extensions
 {
     /// <summary>
     /// CorsPolicyExtension

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Hal.AspDotNetCore3.Extensions
+namespace Hal.Core.Extensions
 {
     /// <summary>
     /// SqlSugar

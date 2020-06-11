@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hal.AspDotNetCore3.Extensions
+namespace Hal.Core.Extensions
 {
     public static class MiddlewareExtension
     {

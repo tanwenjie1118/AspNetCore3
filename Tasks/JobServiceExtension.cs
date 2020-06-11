@@ -1,11 +1,10 @@
 ﻿using Autofac;
 using Hal.Infrastructure.Singleton;
+using Hal.Services.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Hal.Services.Application;
-using Hal.Tasks;
 
-namespace Hal.AspDotNetCore3.Extensions
+namespace Hal.Tasks
 {
     /// <summary>
     /// Job service

@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Hal.Core.csproj" />
     <ProjectReference Include="..\Infrastructure\Hal.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Hal.Services.csproj" />
   </ItemGroup>
 
 </Project>

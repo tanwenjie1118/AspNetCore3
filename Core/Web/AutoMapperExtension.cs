@@ -3,7 +3,7 @@ using AutoMapper;
 using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Builder;
 
-namespace Hal.AspDotNetCore3.Extensions
+namespace Hal.Core.Extensions
 {
     public static class AutoMapperExtension
     {
