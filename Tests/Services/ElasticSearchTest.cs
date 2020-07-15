@@ -3,6 +3,9 @@ using Xunit;
 using Hal.Core.ElasticSearch;
 using Hal.Core.ElasticSearch.Model;
 using System;
+using System.Linq;
+using Nest;
+using System.Collections.Generic;
 
 namespace Tests.Hal.Services
 {
@@ -16,23 +19,28 @@ namespace Tests.Hal.Services
         }
 
         [Fact]
-        public void TestPost()
+        public void TestPostBatch()
         {
-            var model = new ESInformation()
+            var list = new List<ESInformation>(1000);
+            var ids = Enumerable.Range(0, 1000);
+            foreach (var id in ids)
             {
-                Title = "FFFFFF112225113",
-                Business_type = 1,
-                BusNo = 11,
-                CompanyId = 2144233114,
-                CreateDate = DateTime.Now,
-                Level = "info",
-                Description = "This is just a test request for es 1",
-                Online = false
-            };
+                list.Add(new ESInformation()
+                {
+                    Title = $"FFFFFF{id}",
+                    Business_type = 1,
+                    BusNo = 11,
+                    CompanyId = 2144233114,
+                    CreateDate = DateTime.Now,
+                    Level = "info",
+                    Description = $"This is just a test request for es {id}",
+                    Online = true
+                });
+            }
 
-            var list1 = repository.PostData(model);
+            repository.PostBatchData(list);
 
-            Assert.True(list1);
+            Assert.True(true);
         }
     }
 }
