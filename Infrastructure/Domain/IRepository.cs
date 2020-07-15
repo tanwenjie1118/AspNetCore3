@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Hal.Infrastructure.Domain
 {
@@ -41,6 +42,14 @@ namespace Hal.Infrastructure.Domain
         /// <param name="entity"></param>
         /// <returns></returns>
         abstract int Insert<T>(T entity) where T : class, new();
+
+        /// <summary>
+        /// Insert an entity
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        abstract Task<int> InsertAsync<T>(T entity) where T : class, new();
 
         /// <summary>
         /// Insert entities

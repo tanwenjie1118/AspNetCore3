@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Hal.Core.SqlSugar.Imp
 {
@@ -77,6 +78,11 @@ namespace Hal.Core.SqlSugar.Imp
         public int Update<T>(Expression<Func<T, T>> func) where T : class, new()
         {
             return db.Updateable(func).ExecuteCommand();
+        }
+
+        public Task<int> InsertAsync<T>(T entity) where T : class, new()
+        {
+            throw new NotImplementedException();
         }
     }
 }

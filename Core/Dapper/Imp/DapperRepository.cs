@@ -5,6 +5,8 @@ using System.Linq;
 using Hal.Core.Dapper.Base;
 using System.Data;
 using Kogel.Dapper.Extension.MySql;
+using System.Threading.Tasks;
+
 namespace Hal.Core.Dapper.Imp
 {
     public class DapperRepository : IDapperRepository
@@ -65,6 +67,11 @@ namespace Hal.Core.Dapper.Imp
         public int Insert<T>(List<T> entities) where T : class, new()
         {
             return connection.CommandSet<T>().Insert(entities);
+        }
+
+        public async Task<int> InsertAsync<T>(T entity) where T : class, new()
+        {
+            return await connection.CommandSet<T>().InsertAsync(entity);
         }
 
         public int Update<T>(T entity) where T : class, new()

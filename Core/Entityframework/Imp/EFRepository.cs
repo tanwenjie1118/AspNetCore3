@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Hal.Core.Entityframework.Imp
 {
@@ -59,6 +60,11 @@ namespace Hal.Core.Entityframework.Imp
         {
             db.AddRange(entities);
             return db.SaveChanges();
+        }
+
+        public Task<int> InsertAsync<T>(T entity) where T : class, new()
+        {
+            throw new NotImplementedException();
         }
 
         public int Update<T>(T entity) where T : class, new()

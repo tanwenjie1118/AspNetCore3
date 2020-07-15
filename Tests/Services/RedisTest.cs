@@ -1,6 +1,7 @@
 using Hal.AspDotNetCore3;
 using Hal.Core.Redis;
 using System;
+using System.IO;
 using Xunit;
 
 namespace Tests.Hal.Services

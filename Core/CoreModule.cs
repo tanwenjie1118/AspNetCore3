@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Hal.Core.Dapper;
 using Hal.Core.Dapper.Imp;
+using Hal.Core.ElasticSearch;
+using Hal.Core.ElasticSearch.Imp;
 using Hal.Core.Entityframework;
 using Hal.Core.Entityframework.Imp;
 using Hal.Core.MongoDB;
@@ -23,6 +25,7 @@ namespace Hal.Core
             builder.RegisterType(typeof(DapperRepository)).As(typeof(IDapperRepository));
             builder.RegisterType(typeof(EFRepository)).As(typeof(IEFRepository));
             builder.RegisterGeneric(typeof(MongoDbRepository<>)).As(typeof(IMongoDbRepository<>));
+            builder.RegisterType(typeof(ESRepository)).As(typeof(IESRepository));
         }
     }
 }

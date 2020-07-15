@@ -70,5 +70,50 @@ namespace Tests.Hal.Services
             var timespan = sw.ElapsedMilliseconds;
             coms.ShouldBeGreaterThan(0);
         }
+
+        [Fact]
+        public void InsertModelAsync()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var range = Enumerable.Range(1, 1000).ToList();
+
+            range.ForEach(async (x) =>
+            {
+                await dapper.InsertAsync(new Company()
+                {
+                    Name = "tan",
+                    No = new Random().Next(0, 9999).ToString(),
+                    Version = x.ToString()
+                });
+            });
+            sw.Stop();
+
+            var timespan = sw.ElapsedMilliseconds;
+            range.FirstOrDefault().ShouldBeGreaterThan(0);
+        }
+
+
+        [Fact]
+        public void InsertModelSync()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var range = Enumerable.Range(1, 1000).ToList();
+
+            range.ForEach((x) =>
+            {
+                dapper.Insert(new Company()
+                {
+                    Name = "tan",
+                    No = new Random().Next(0, 9999).ToString(),
+                    Version = x.ToString()
+                });
+            });
+
+            sw.Stop();
+            var timespan = sw.ElapsedMilliseconds;
+            range.FirstOrDefault().ShouldBeGreaterThan(0);
+        }
     }
 }

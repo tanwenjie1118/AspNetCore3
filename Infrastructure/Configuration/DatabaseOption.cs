@@ -10,5 +10,6 @@ namespace Hal.Infrastructure.Configuration
         public MongodbOption Mongodb { get; set; }
         public SqliteOption Sqlite { get; set; }
         public MySqlOption MySql { get; set; }
+        public ESSqlOption ElasticSearch { get; set; }
     }
 }

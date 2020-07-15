@@ -25,7 +25,7 @@
 - Consul
 - Nginx
 - Jwt token Authentication
-- More..
+- Elastic Search
 
 ### How to add dependencies
 
@@ -205,6 +205,26 @@ docker exec -it consul1 consul members
 #https://www.jianshu.com/p/df3ef9a4f456
 
 ```
+
+### How to deploy elastic search and kibana
+
+```shell
+#how to run es:
+
+docker run -d -it --name myes -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms256m -Xmx256m" elasticsearch:7.8.0
+
+#elasticsearch.yml:
+
+network.host: 0.0.0.0
+port: 9200
+
+#how to run kibana:
+
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' myres
+docker run -d --name mykibana -e ELASTICSEARCH_URL=http://172.17.0.2:9200  -p 5601:5601 kibana:7.8.0
+```
+
+
 
 ### Portal
 
