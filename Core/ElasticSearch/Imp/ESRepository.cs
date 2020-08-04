@@ -34,7 +34,8 @@ namespace Hal.Core.ElasticSearch.Imp
                 Settings = new IndexSettings
                 {
                     NumberOfReplicas = 1, // replicas
-                    NumberOfShards = 6 // shards
+                    NumberOfShards = 1 // shards
+                    // nodes should bigger or equal than shards + replicas
                 }
             };
 
