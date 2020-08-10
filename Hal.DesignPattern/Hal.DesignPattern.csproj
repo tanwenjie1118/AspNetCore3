@@ -6,8 +6,10 @@
 
   <ItemGroup>
     <Folder Include="Prototype\" />
-    <Folder Include="AbstractFactory\" />
-    <Folder Include="Builder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Hal.Core.csproj" />
   </ItemGroup>
 
 </Project>
