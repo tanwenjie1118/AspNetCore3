@@ -21,8 +21,8 @@ namespace Tests.Hal.Services
         [Fact]
         public void TestPostBatch()
         {
-            var list = new List<ESInformation>(1000);
-            var ids = Enumerable.Range(0, 1000);
+            var list = new List<ESInformation>();
+            var ids = Enumerable.Range(10000, 50000);
             foreach (var id in ids)
             {
                 list.Add(new ESInformation()

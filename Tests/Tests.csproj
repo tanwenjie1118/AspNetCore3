@@ -14,14 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Template\ClassTemplate.txt">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ClassTemplate.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.3" />
@@ -40,6 +32,7 @@
     <ProjectReference Include="..\Application\Hal.Applications.csproj" />
     <ProjectReference Include="..\AspDotNetCore3\Hal.AspDotNetCore3.csproj" />
     <ProjectReference Include="..\Core\Hal.Core.csproj" />
+    <ProjectReference Include="..\Hal.DesignPattern\Hal.DesignPattern.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Template\ClassTemplate.cs">
+    <Compile Update="Template\UserDefined\ClassTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ClassTemplate.tt</DependentUpon>
@@ -61,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Template\ClassTemplate.tt">
+    <None Update="Template\UserDefined\ClassTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ClassTemplate.cs</LastGenOutput>
     </None>

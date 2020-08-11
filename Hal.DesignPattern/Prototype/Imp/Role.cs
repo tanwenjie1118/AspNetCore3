@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Hal.DesignPattern.Prototype.Imp
 {
+    /// <summary>
+    /// 对象必须实现 Clone 方法
+    /// </summary>
     public class Role : BasicObject
     {
         public Role(string id) : base(id)
