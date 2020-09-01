@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hal.Applications", "Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hal.DesignPattern", "Hal.DesignPattern\Hal.DesignPattern.csproj", "{747CCC20-C764-4E90-915A-E2AC7C626D02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hal.DataInstructure", "Hal.DataInstructure\Hal.DataInstructure.csproj", "{B092F934-CDC5-439C-A828-CB61E6CD1458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hal.DataInstructure", "Hal.DataInstructure\Hal.DataInstructure.csproj", "{B092F934-CDC5-439C-A828-CB61E6CD1458}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
