@@ -2,6 +2,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -24,7 +25,8 @@ namespace Tests.Algorithm
         [Fact]
         public void Test2()
         {
-            var flag = CanWin(new int[] {2, 4, 55, 6, 8});
+            var flag = CanWin(new int[] { 1, 5, 2 });
+            //var flag = CanWin(new int[] { 2, 4, 55, 6, 8 });
             flag.ShouldBeTrue();
         }
 
@@ -33,8 +35,8 @@ namespace Tests.Algorithm
             int A = 0;
             int B = 0;
 
-            var f1 = Func(nums.ToList(), A, B);
-            return f1;
+            var f = Func(nums.ToList(), A, B);
+            return f;
         }
 
         private bool Func(List<int> list, int A, int B)
@@ -42,80 +44,165 @@ namespace Tests.Algorithm
             var copy = new int[list.Count];
             list.CopyTo(copy);
             var list1 = copy.ToList();
-            int A1 = A;
-            int B1 = B;
+            // 从前取第一个数
+            if (AGetFrontSide(list, A, B))
+            {
+                return true;
+            }
 
-            #region 取前端值
+            // 从后取第一个数
+            if (AGetEndSide(list1, A, B))
+            {
+                return true;
+            }
 
+            return false;
+        }
+
+        private bool AGetFrontSide(List<int> list, int A, int B)
+        {
             // 玩家一需要通过取值 找到一个方法永远可以赢玩家二
             var first = list.FirstOrDefault();
             A += first;
-            list.RemoveAt(0);
+            StackPop(list, true);
 
             if (list.Count == 0)
             {
                 if (A >= B)
                 {
+                    Debug.WriteLine($"当前 A =={A} B == {B}");
                     return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (list.Count == 1)
+            {
+                B += list.FirstOrDefault();
+                StackPop(list, false);
+                if (A >= B)
+                {
+                    Debug.WriteLine($"当前 A =={A} B == {B}");
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             else
             {
-                // 玩家二永远取最大值
                 var bfirst = list.FirstOrDefault();
                 var blast = list.LastOrDefault();
-                if (blast > bfirst)
-                {
-                    B += blast;
-                    list.RemoveAt(list.Count - 1);
-                }
-                else
-                {
-                    B += bfirst;
-                    list.RemoveAt(0);
-                }
-            }
 
-            #endregion
+                // 分两种情况 取前值 取后值
+                var cache = new int[list.Count];
+                var cache1 = new int[list.Count];
+                list.CopyTo(cache);
+                list.CopyTo(cache1);
+                var B1 = B;
+                var B2 = B;
+                var _list = cache.ToList();
+                var _list1 = cache1.ToList();
 
-            #region 取后端值
-            var last = list1.LastOrDefault();
-            A1 += last;
-            list1.RemoveAt(list1.Count - 1);
+                // 取前值
+                StackPop(_list, true);
+                B1 += bfirst;
 
-            if (list1.Count == 0)
-            {
-                if (A1 >= B1)
+                // 取后值
+                StackPop(_list1, false);
+                B2 += blast;
+
+                if (Func(_list1, A, B2) && Func(_list, A, B1))
                 {
                     return true;
                 }
-            }
-            else
-            {
-                // 玩家二永远取最大值
-                var bfirst1 = list1.FirstOrDefault();
-                var blast1 = list1.LastOrDefault();
-                if (bfirst1 > blast1)
+                else
                 {
-                    B1 += bfirst1;
-                    list1.RemoveAt(0);
+                    return false;
+                }
+            }
+        }
+
+        private bool AGetEndSide(List<int> list, int A, int B)
+        {
+            var last = list.LastOrDefault();
+            A += last;
+            StackPop(list, false);
+
+            if (list.Count == 0)
+            {
+                if (A >= B)
+                {
+                    Debug.WriteLine($"当前 A =={A} B == {B}");
+                    return true;
                 }
                 else
                 {
-                    B1 += blast1;
-                    list1.RemoveAt(list1.Count - 1);
+                    return false;
                 }
             }
-
-            #endregion
-
-            if (list1.Count == 0)
+            else if (list.Count == 1)
             {
-                return A1 >= B1 || A >= B;
+                B += list.FirstOrDefault();
+                StackPop(list, false);
+                if (A >= B)
+                {
+                    Debug.WriteLine($"当前 A =={A} B == {B}");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return Func(list, A, B) || Func(list1, A1, B1);
+                var bfirst = list.FirstOrDefault();
+                var blast = list.LastOrDefault();
+
+                // 分两种情况 取前值 取后值
+                var cache = new int[list.Count];
+                var cache1 = new int[list.Count];
+                list.CopyTo(cache);
+                list.CopyTo(cache1);
+                var B1 = B;
+                var B2 = B;
+                var _list = cache.ToList();
+                var _list1 = cache1.ToList();
+
+                // 取前值
+                StackPop(_list, true);
+                B1 += bfirst;
+
+                // 取后值
+                StackPop(_list1, false);
+                B2 += blast;
+                if (Func(_list1, A, B2) && Func(_list, A, B1))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        private void StackPop(List<int> list, bool ishead)
+        {
+            if (ishead)
+            {
+                Debug.WriteLine("删除头部：" + list.FirstOrDefault());
+                list.RemoveAt(0);
+
+            }
+            else
+            {
+                Debug.WriteLine("删除尾部：" + list.LastOrDefault());
+                list.RemoveAt(list.Count - 1);
             }
         }
     }
