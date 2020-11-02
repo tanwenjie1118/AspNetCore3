@@ -1,4 +1,7 @@
-﻿using Hangfire.Dashboard;
+﻿using Autofac;
+using Hal.Infrastructure.Singleton;
+using Hangfire.Dashboard;
+
 
 namespace Hal.Infrastructure.Filters
 {
@@ -11,9 +14,7 @@ namespace Hal.Infrastructure.Filters
         /// <returns></returns>
         public bool Authorize(DashboardContext context)
         {
-            var httpContext = context.GetHttpContext();
-
-            return httpContext.User.Identity.IsAuthenticated;
+            return HttpContext.Current.User.Identity.IsAuthenticated;
         }
     }
 }

@@ -45,6 +45,8 @@ using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using Hal.Infrastructure.Constant;
+using Hal.Tasks;
+using Hal.Core.Web;
 //using StackExchange.Profiling.Storage;
 
 namespace Hal.AspDotNetCore3
@@ -145,8 +147,7 @@ namespace Hal.AspDotNetCore3
               dbopt.Mongodb.DbNo,
               TimeSpan.FromMinutes(1)));
 
-            // Add Http context accessor
-            services.AddHttpContextAccessor();
+
 
             services.AddCorsPolicy();
 
@@ -267,7 +268,7 @@ namespace Hal.AspDotNetCore3
             services.AddHangfireServer();
 
             // Add Task scheduler
-            //services.AddJobService();
+            services.AddJobService();
 
             // Add Dashboard for http reports
             services.AddHttpReportsDashboard(opt =>
@@ -277,6 +278,9 @@ namespace Hal.AspDotNetCore3
 
             // Add Route and Views for http reports
             services.AddControllersWithViews();
+
+            // Add Http context accessor
+            services.AddHttpContextAccessor();
         }
 
         // Autofac container
@@ -356,6 +360,8 @@ namespace Hal.AspDotNetCore3
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            app.UseStaticHttpContext();
+
             // Authentication
             app.UseAuthentication();
 
@@ -369,16 +375,15 @@ namespace Hal.AspDotNetCore3
             app.UseResponseCompression();
 
             // Open user defined job services
-            //app.UseJob();
+            app.UseJob();
 
             // Open hangfire dashboard service
             // if release authorization filter must return true
             app.UseHangfireDashboard(SystemConstant.Hangfire
-            //    , new DashboardOptions
-            //{
-            //    Authorization = new[] { new HangfireAuthorizationFilter() }
-            //}
-                );
+                , new DashboardOptions
+                {
+                    Authorization = new[] { new HangfireAuthorizationFilter() }
+                });
 
             // Active http reports plugin
             app.UseHttpReports();
