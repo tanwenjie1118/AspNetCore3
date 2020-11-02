@@ -1,0 +1,3 @@
+{
+  "instruction": "The memory between elements are not necessary to be continuous , every element has its own logic to find the next or pre element"
+}
