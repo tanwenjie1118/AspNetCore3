@@ -373,24 +373,34 @@ namespace Hal.AspDotNetCore3
 
             // Open hangfire dashboard service
             // if release authorization filter must return true
-            app.UseHangfireDashboard(SystemConstant.Hangfire, new DashboardOptions
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter() }
-            });
+            app.UseHangfireDashboard(SystemConstant.Hangfire
+            //    , new DashboardOptions
+            //{
+            //    Authorization = new[] { new HangfireAuthorizationFilter() }
+            //}
+                );
 
             // Active http reports plugin
             app.UseHttpReports();
 
             // Active http report dashboard service
-            app.UseHttpReportsDashboard();
+            //app.UseHttpReportsDashboard();
 
             app.UseEndpoints(endpoints =>
             {
+                // API endpoints
                 endpoints.MapControllers();
+
+                // HUB endpoints
                 endpoints.MapHub<MyHub>(SystemConstant.SignalRHub);
+
+                // MVC endpoints
                 endpoints.MapControllerRoute(
                        name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // Hangfire endpoints
+                endpoints.MapHangfireDashboard();
             });
         }
 

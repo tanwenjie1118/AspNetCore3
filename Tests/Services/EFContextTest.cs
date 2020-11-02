@@ -23,12 +23,6 @@ namespace Tests.Hal.Services
         }
 
         [Fact]
-        public void InitDatabaseModel()
-        {
-            MyDbContext.Init(dbOption.MySql.Conn);
-        }
-
-        [Fact]
         public void InsertModel()
         {
             Stopwatch sw = new Stopwatch();
