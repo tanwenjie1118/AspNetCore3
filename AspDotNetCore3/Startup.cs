@@ -280,7 +280,7 @@ namespace Hal.AspDotNetCore3
             services.AddControllersWithViews();
 
             // Add Http context accessor
-            services.AddHttpContextAccessor();
+            services.AddSingletonHttpContextAccessor();
         }
 
         // Autofac container
@@ -379,7 +379,8 @@ namespace Hal.AspDotNetCore3
 
             // Open hangfire dashboard service
             // if release authorization filter must return true
-            app.UseHangfireDashboard(SystemConstant.Hangfire
+            app.UseHangfireDashboard(
+                SystemConstant.Hangfire
                 , new DashboardOptions
                 {
                     Authorization = new[] { new HangfireAuthorizationFilter() }

@@ -43,7 +43,7 @@ namespace Hal.AspDotNetCore3
               .ConfigureLogging((hostingContext, builder) =>
               {
                   builder.ClearProviders();//remove default providers
-                builder.AddConsole();
+                  builder.AddConsole();
                   builder.AddDebug();
               })
               .ConfigureWebHostDefaults(
