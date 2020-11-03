@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -18,15 +16,12 @@ using Hal.Core.Entityframework;
 using Hal.Core.MongoDB;
 using Hal.Core.Redis;
 using Hangfire;
-using Hangfire.Common;
-using Hal.Infrastructure;
 using Hal.Infrastructure.Configuration;
 using Hal.Infrastructure.Domain;
 using Hal.Infrastructure.Extensions;
 using Hal.Infrastructure.Filters;
 using Hal.Infrastructure.Singleton;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -40,9 +35,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using Hal.Infrastructure.Constant;
 using Hal.Tasks;
@@ -278,9 +271,6 @@ namespace Hal.AspDotNetCore3
 
             // Add Route and Views for http reports
             services.AddControllersWithViews();
-
-            // Add Http context accessor
-            services.AddSingletonHttpContextAccessor();
         }
 
         // Autofac container
@@ -383,7 +373,7 @@ namespace Hal.AspDotNetCore3
                 SystemConstant.Hangfire
                 , new DashboardOptions
                 {
-                    Authorization = new[] { new HangfireAuthorizationFilter() }
+                    //Authorization = new[] { new HangfireAuthorizationFilter() }
                 });
 
             // Active http reports plugin
