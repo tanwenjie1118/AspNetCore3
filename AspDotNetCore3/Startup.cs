@@ -145,32 +145,34 @@ namespace Hal.AspDotNetCore3
             services.AddCorsPolicy();
 
             // Add Authtication handler
-            // cookie
-            //services.AddAuthenticationCore(options =>
-            //{
-            //    options.DefaultScheme = "myScheme";
-            //    options.AddScheme<MyHandler>("myScheme", "demo scheme");
-            //});
-            services.AddAuthentication(options =>
+            // cookie based authtication is set for website
+            services.AddAuthenticationCore(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    // key
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
-                    ValidateIssuer = true,
-                    ValidIssuer = suopt.Jwt.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = suopt.Jwt.Audience,
-                    RequireExpirationTime = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.DefaultScheme = SystemConstant.AuthSchema;
+                options.AddScheme<MyHandler>(SystemConstant.AuthSchema, SystemConstant.AuthSchemaDescription);
             });
+
+            // jwt based authtication is set for web api
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(x =>
+            //{
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        // key
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(suopt.Jwt.Secret)),
+            //        ValidateIssuer = true,
+            //        ValidIssuer = suopt.Jwt.Issuer,
+            //        ValidateAudience = true,
+            //        ValidAudience = suopt.Jwt.Audience,
+            //        RequireExpirationTime = true,
+            //        ValidateLifetime = true,
+            //        ClockSkew = TimeSpan.Zero
+            //    };
+            //});
 
             // Add Controllers for API
             services.AddControllers(c =>
@@ -373,7 +375,7 @@ namespace Hal.AspDotNetCore3
                 SystemConstant.Hangfire
                 , new DashboardOptions
                 {
-                    //Authorization = new[] { new HangfireAuthorizationFilter() }
+                    Authorization = new[] { new HangfireAuthorizationFilter() }
                 });
 
             // Active http reports plugin
@@ -405,18 +407,6 @@ namespace Hal.AspDotNetCore3
             // ¡¾Use¡¿ make current context to next middleware
             // ¡¾Run¡¿ make current context shutdown and return right now 
 
-            app.Map("/login", builder =>
-             builder.Use(next =>
-             {
-                 return async (context) =>
-                 {
-                     var claimIdentity = new ClaimsIdentity();
-                     claimIdentity.AddClaim(new Claim(ClaimTypes.Name, "Hal"));
-                     await context.SignInAsync("myScheme", new ClaimsPrincipal(claimIdentity));
-                     await next(context);
-                 };
-             }));
-
             app.Map("/resource",
                 builder =>
                 builder.Run(
@@ -424,30 +414,11 @@ namespace Hal.AspDotNetCore3
                     await context.Response.WriteAsync("Hello, ASP.NET Hal.Core!"))
                 );
 
-            app.Map("/",
-                builder =>
-                builder.Run(
-                 (context) =>
-                 {
-                     context.Response.Redirect("/swagger");
-                     return Task.CompletedTask;
-                 }));
-
             // use middleware
             app.Use(async (context, next) =>
             {
-                var user = context.User;
-                if (user?.Identity?.IsAuthenticated ?? false)
-                {
-                    if (user.Identity.Name != "Hal") await context.ForbidAsync("myScheme");
-                    else await next();
-                }
-                else
-                {
-                    await context.ChallengeAsync("myScheme");
-                }
+                await next();
             });
-
 
             //app.MapWhen(context =>
             //{

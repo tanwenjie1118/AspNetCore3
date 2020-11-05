@@ -11,6 +11,8 @@ namespace Hal.Infrastructure.Constant
         public const string Name = "Hal";
         public const string WebDllName = "Hal.AspDotNetCore3.xml";
         public const string AllDll = "*.dll";
+        public const string AuthSchema = "MyScheme";
+        public const string AuthSchemaDescription = "MySchemeDemo";
 
 
 

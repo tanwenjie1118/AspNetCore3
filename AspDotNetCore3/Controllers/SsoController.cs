@@ -2,6 +2,7 @@
 using Hal.Core.Entities;
 using Hal.Core.SqlSugar;
 using Hal.Infrastructure.Configuration;
+using Hal.Infrastructure.Constant;
 using Hal.Infrastructure.Extensions;
 using Hal.Infrastructure.Helpers;
 using Hal.Infrastructure.Singleton;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Hal.AspDotNetCore3.Controllers
 {
@@ -29,7 +31,7 @@ namespace Hal.AspDotNetCore3.Controllers
         }
 
         [HttpPost("token")]
-        public ActionResult Token(string account, string psw)
+        public async Task<ActionResult> Token(string account, string psw)
         {
             if (string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(psw))
             {
@@ -44,10 +46,29 @@ namespace Hal.AspDotNetCore3.Controllers
                 }
             }
 
-            // login succeed jwt encrypt
+            // login with jwt
             var suopt = AutofacContainer.Container.Resolve<StartupOption>();
             TokenModelJwt tokenModel = new TokenModelJwt { Uid = user.Id, Role = user.Role };
             var jwtStr = JwtHelper.Encrypt(tokenModel, suopt.Jwt);
+
+            // login with cookie
+            var di = new ClaimsIdentity("cookie");
+            di.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+
+            var cp = new ClaimsPrincipal(di);
+
+            var properties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTime.Now.AddMinutes(1),
+                IsPersistent = true
+            };
+
+            await HttpContext.SignInAsync(cp, properties);
+
+            var ticket = new AuthenticationTicket(cp, properties, SystemConstant.AuthSchema);
+
+            AuthenticateResult.Success(ticket);
+
             return Ok(jwtStr);
         }
     }

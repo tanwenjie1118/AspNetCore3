@@ -20,9 +20,9 @@ namespace Hal.AspDotNetCore3.Controllers
         [HttpGet]
         public string UserInfo()
         {
-            var claim = HttpContext.User.FindFirst(ClaimTypes.Role);
+            var claim = HttpContext.User.FindFirst(ClaimTypes.Name);
             
-            return claim.Value;
+            return claim?.Value;
         }
     }
 }
