@@ -4,9 +4,10 @@ namespace Hal.DesignPattern.Models
 {
     public class Gloves : Product
     {
-        public override void Use()
+        public string Name { set; get; }
+        public override bool Use()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

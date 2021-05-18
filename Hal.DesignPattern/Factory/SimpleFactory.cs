@@ -20,17 +20,17 @@ namespace Hal.DesignPattern.Factory
 
         public static Product GetProduct(Type type)
         {
-            if (typeof(Shoes) == type.GetType())
+            if (typeof(Shoes) == type)
             {
-                return new Shoes();
+                return new Shoes() {  };
             }
             else
-            if (typeof(Knife) == type.GetType())
+            if (typeof(Knife) == type)
             {
                 return new Knife();
             }
             else
-            if (typeof(Gloves) == type.GetType())
+            if (typeof(Gloves) == type)
             {
                 return new Knife();
             }
