@@ -6,17 +6,17 @@ namespace Hal.DesignPattern.AbstractFactory
     {
         public override Gloves GetGloves()
         {
-            throw new System.NotImplementedException();
+            return new Gloves();
         }
 
         public override Knife GetKnife()
         {
-            throw new System.NotImplementedException();
+            return new Knife();
         }
 
         public override Shoes GetShoes()
         {
-            throw new System.NotImplementedException();
+            return new Shoes();
         }
     }
 }

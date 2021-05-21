@@ -17,7 +17,10 @@ namespace Hal.DesignPattern.Singleton
         // 定义私有构造函数，使外界不能创建该类实例
         private TheMultiThreadSingleton()
         {
+            InitializeDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:dd");
         }
+
+        public readonly string InitializeDateTime;
 
         /// <summary>
         /// 定义公有方法提供一个全局访问点,同时你也可以定义公有属性来提供全局访问点

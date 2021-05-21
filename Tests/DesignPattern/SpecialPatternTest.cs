@@ -6,10 +6,13 @@ namespace Tests.DesignPattern
 {
     public class SpecialPatternTest
     {
+        /// <summary>
+        /// 观察者模式
+        /// </summary>
         [Fact]
         public void Observer()
         {
-            var order = "Do me a favor";
+            var message = "Do me a favor";
             Leader a = new Leader();
             Employee s = new Employee();
             Employee d = new Employee();
@@ -18,11 +21,11 @@ namespace Tests.DesignPattern
             a.AddObserver(d);
             a.AddObserver(f);
 
-            a.Publish(order);
+            a.Publish(message);
 
-            s.CurrentOrder.ShouldBe(order);
-            s.CurrentOrder.ShouldBe(order);
-            s.CurrentOrder.ShouldBe(order);
+            s.CurrentOrder.ShouldBe(message);
+            s.CurrentOrder.ShouldBe(message);
+            s.CurrentOrder.ShouldBe(message);
         }
     }
 }
